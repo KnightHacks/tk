@@ -1,2 +1,7 @@
-# tk
-The Knight Hacks Discord Bot
+# T.K the Tech Knight
+The official Knight Hacks Discord Bot, inspired by our new mascot, T.K!
+
+## Commands
+```bash
+/ping - responds with "Pong!"
+```
