@@ -4,15 +4,18 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // Get the environment variables
-const { DISCORD_TOKEN, DISCORD_CLIENT_ID } = process.env;
+const { DISCORD_TOKEN, DISCORD_CLIENT_ID, DISCORD_WEBHOOK_URL } = process.env;
 
 // Check if the environment variables are set
-if (!DISCORD_TOKEN || !DISCORD_CLIENT_ID) {
-  throw new Error("Missing environment variables");
+if (!DISCORD_TOKEN || !DISCORD_CLIENT_ID || !DISCORD_WEBHOOK_URL) {
+    throw new Error("Missing environment variables");
 }
 
 // Export the config object
 export const config = {
-  DISCORD_TOKEN,
-  DISCORD_CLIENT_ID,
+    DISCORD_TOKEN,
+    DISCORD_CLIENT_ID,
+    DISCORD_WEBHOOK_URL,
 };
+
+console.log(config);
