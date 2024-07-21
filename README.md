@@ -8,6 +8,7 @@ The official Knight Hacks Discord Bot, inspired by our new mascot, T.K!
 /beep - responds with "Boop!"
 /duck - sends random duck image!
 /joke - sends a random programming joke!
+/countdown - sends a countdown to the next Knight Hacks event!
 ```
 
 ### Adding a Command
