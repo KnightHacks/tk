@@ -14,8 +14,14 @@ export const client = new Client({
 });
 
 // Log when T.K is ready
-client.once("ready", () => {
+client.once("ready", async () => {
     console.log("T.K is ready :)");
+
+    if (client.guilds.cache.size > 0) {
+        for (const guild of client.guilds.cache.values()) {
+            await deployCommands({ guildId: guild.id });
+        }
+    }
 });
 
 // Load commands when T.K joins a new guild
