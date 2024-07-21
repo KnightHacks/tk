@@ -25,9 +25,9 @@
     "@napi-rs/canvas": "^0.1.53",
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
+    "jimp": "^0.22.12",
     "node-cron": "^3.0.3",
-    "node-fetch": "^3.3.2",
-    "jimp": "^0.22.12"
+    "node-fetch": "^3.3.2"
   },
   "devDependencies": {
     "@types/node": "^18.13.0",
