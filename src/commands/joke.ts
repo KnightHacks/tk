@@ -12,9 +12,9 @@ interface JokeProps {
 } // joke type for the json that's returned
 
 export const data = new SlashCommandBuilder()
-    .setName("programmingjoke")
-    .setDescription("Tells a programming joke!");
-    // metadata for the programming joke command
+    .setName("joke")
+    .setDescription("Tells a joke!");
+    // metadata for the joke command
 
 const url = "https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit"; // keep it clean
 export async function execute(interaction: CommandInteraction) {
