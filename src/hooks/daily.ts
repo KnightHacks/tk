@@ -28,10 +28,6 @@ interface Topic {
     slug: string;
 }
 
-interface ErrorProps {
-    message: string,
-}
-
 const funMessages = [
     "Try not to TLE this time!",
     "Let's hope it's not a graph network flow DP problem...",
@@ -54,7 +50,7 @@ const funMessages = [
 
 // Leetcode API Endpoint and Channel ID
 const url = "https://alfa-leetcode-api.onrender.com/daily";
-const channelId = "1263954540089180231";
+// const channelId = "1263954540089180231";
 
 // Function to fetch the Daily Problem
 const fetchData = async (url: any): Promise<DailyProblemProps> => {
@@ -75,13 +71,13 @@ const fetchData = async (url: any): Promise<DailyProblemProps> => {
 
 const randInt = (max: number) => {
     return Math.floor(Math.random() * max);
-}
+};
 
 // Leetcode Daily Problem Webhook
 export async function execute(webhook: WebhookClient) {
     try {
         // Create a cron job that will run at 11:00 AM every day        
-        cron.schedule("* * * * *", async () => {
+        cron.schedule("0 11 * * *", async () => {
             // Fetch the problem data and format the data
             const problem = await fetchData(url) as DailyProblemProps;
             const date = problem.date.split("-");            
@@ -126,20 +122,6 @@ export async function execute(webhook: WebhookClient) {
                 funMessages[randInt(funMessages.length)], 
                 embeds: [problemEmbed]
             }); // gives a little funny message with the announcement
-            
-            // We have 2 message types from 2 different packages
-            // so we have to do this ..thing to convert it
-            client.channels.fetch(embed.channel_id)
-            .then((channel) => { 
-                if(channel && channel.type === ChannelType.GuildText) {
-                    channel.messages.fetch(embed.id)
-                        .then(async (msg)=>{
-                            const thread = await msg.startThread({
-                                name: dateString,
-                                autoArchiveDuration: ThreadAutoArchiveDuration.OneDay
-                            });
-                        });
-                }
 
             // We have 2 message types from 2 different packages
             // so we have to do this ..thing to convert it
@@ -161,9 +143,7 @@ export async function execute(webhook: WebhookClient) {
                 }
             });
         });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    }
-    )} catch (err: any) {
+    } catch (err: any) {
         console.error(err.message);
     } // any error
 }

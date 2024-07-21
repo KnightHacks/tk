@@ -1,4 +1,7 @@
-import { CommandInteraction, SlashCommandBuilder, EmbedBuilder} from "discord.js";
+import { 
+    CommandInteraction, 
+    SlashCommandBuilder, 
+    EmbedBuilder} from "discord.js";
 import fetch from "node-fetch";
 import JIMP from "jimp";
 
