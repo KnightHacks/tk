@@ -18,7 +18,7 @@ export async function execute(interaction: CommandInteraction) {
     // Grab today's date and the date of Knight Hacks
     const today = new Date();
     // Add 4 hours to the date to account for the time difference (THE VPS IS FOUR HOURS BEHIND)
-    today.setHours(today.getHours() + 4);
+    today.setHours(today.getHours() - 4);
     const KH = new Date("October 4, 2024 17:00:00");
 
     // Calculate the differences in time
