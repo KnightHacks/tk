@@ -1,5 +1,3 @@
-export const ADMIN = ["dvidal1205", "must108"];
-
 export const DAILY_MESSAGES = [
     "Try not to TLE this time!",
     "Let's hope it's not a graph network flow DP problem...",

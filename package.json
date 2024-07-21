@@ -19,12 +19,15 @@
     "start": "node .",
     "build": "tsup src/index.ts --minify",
     "format": "prettier --write \"**/*.{json,ts}\"",
-    "lint": "eslint . --ext ts --fix"
+    "lint": "eslint . --ext ts --fix",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
-    "@napi-rs/canvas": "^0.1.53",
+    "@libsql/client": "^0.7.0",
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
+    "drizzle-orm": "^0.32.0",
     "jimp": "^0.22.12",
     "node-cron": "^3.0.3",
     "node-fetch": "^3.3.2"
@@ -34,6 +37,7 @@
     "@types/node-cron": "^3.0.11",
     "@typescript-eslint/eslint-plugin": "^5.51.0",
     "@typescript-eslint/parser": "^5.51.0",
+    "drizzle-kit": "^0.23.0",
     "eslint": "^8.33.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-import": "^2.25.2",
