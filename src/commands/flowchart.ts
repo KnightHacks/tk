@@ -7,7 +7,7 @@ import {
 export const data = new SlashCommandBuilder()
     .setName("flowchart")
     .setDescription("Get the UCF flowchart for your major!")
-    .addStringOption((option) =>
+    .addStringOption((option) => // to have a second parameter in your command
         option.setName("major")
             .setDescription("Input your major for its flowchart!")
             .setRequired(true)
@@ -28,14 +28,14 @@ export const data = new SlashCommandBuilder()
 
 
 export async function execute(interaction: CommandInteraction) {
-    const major = interaction.options.getString("major");
+    const major = interaction.options.getString("major"); // this still works. idk why it shows an error
     let flowchartState = "";
 
     if (!major) {
         return interaction.reply("Invalid major!");
     }
 
-    switch (major) {
+    switch (major) { // images hosted on imgur... lol
         case "Computer Science":
             flowchartState = "https://i.imgur.com/yydsAcX.png";
             break;
@@ -54,5 +54,5 @@ export async function execute(interaction: CommandInteraction) {
     .setTitle(major + " Flowchart")
     .setImage(flowchartState);
 
-    return interaction.reply({ embeds: [flowchartEmbed] });
+    return interaction.reply({ embeds: [flowchartEmbed] }); // returns the embed with the image
 }

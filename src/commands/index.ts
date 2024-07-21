@@ -3,7 +3,7 @@ import * as duck from "./duck";
 import * as joke from "./joke";
 import * as cats from "./cat";
 import * as flowchart from "./flowchart";
-
+import * as countdown from "./countdown";
 
 // Export all commands
 export const commands = {
@@ -11,5 +11,6 @@ export const commands = {
     duck,
     joke,
     cats,
-    flowchart
+    flowchart,
+    countdown,
 };
