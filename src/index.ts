@@ -47,12 +47,7 @@ client.login(config.DISCORD_TOKEN);
     Webhook Logic
 */
 
-// Create a new Webhook client instance
-const webhook = new WebhookClient({
-    url: config.DISCORD_WEBHOOK_URL,
-});
-
-// Call all of the hooks
+// Call all of the hooks (each hook will need a webhook client created in the hook)
 for (const hook of Object.values(hooks)) {
-    hook(webhook);
+    hook();
 }
