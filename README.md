@@ -6,6 +6,7 @@ The official Knight Hacks Discord Bot, inspired by our new mascot, T.K!
 
 ```bash
 /beep - responds with "Boop!"
+/duck - sends random duck image!
 ```
 
 ### Adding a Command

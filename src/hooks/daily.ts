@@ -1,4 +1,9 @@
-import { WebhookClient, EmbedBuilder, ChannelType, ThreadAutoArchiveDuration } from "discord.js";
+import {
+    WebhookClient,
+    EmbedBuilder,
+    ChannelType,
+    ThreadAutoArchiveDuration,
+} from "discord.js";
 import { client } from "../index";
 import fetch from "node-fetch";
 import cron from "node-cron";
@@ -19,8 +24,8 @@ interface DailyProblemProps {
 
 // Topic Interfaces
 interface Topic {
-    name: string,
-    slug: string
+    name: string;
+    slug: string;
 }
 
 interface ErrorProps {
@@ -56,11 +61,11 @@ const fetchData = async (url: any): Promise<DailyProblemProps> => {
     try {
         const res = await fetch(url);
 
-        if(!res.ok) {
+        if (!res.ok) {
             throw new Error(`Error: ${res.status}`);
         }
 
-        const data = await res.json() as DailyProblemProps;
+        const data = (await res.json()) as DailyProblemProps;
         return data;
     } catch (err) {
         console.log(`Error: ${err}`);
@@ -85,19 +90,42 @@ export async function execute(webhook: WebhookClient) {
             // Create an embed message for aesthetics
             const problemEmbed = new EmbedBuilder()
             .setColor(0x33e0ff)
-            .setTitle(`${problem.questionFrontendId}. ${problem.questionTitle}`)
+            .setTitle(
+                `${problem.questionFrontendId}. ${problem.questionTitle}`
+            )
             .setURL(problem.questionLink)
-            .setAuthor({name: `Leetcode Daily for ${dateString}`, iconURL: "https://assets.leetcode.com/static_assets/public/images/LeetCode_logo_rvs.png"})
+            .setAuthor({
+                name: `Leetcode Daily for ${dateString}`, 
+                iconURL: "https://assets.leetcode.com/static_assets/public/images/LeetCode_logo_rvs.png"
+            })
             .addFields(
-                {name: "Difficulty", value: problem.difficulty, inline: true},
-                {name: "Likes", value: problem.likes.toString(), inline: true},
-                {name: "Dislikes", value: problem.dislikes.toString(), inline: true},
-                {name: "Topics", value:`${problem.topicTags.map((top)=>{return `${top.name}  -  *https://leetcode.com/tag/${top.slug}*`;}).join("\n")}`}
+                {
+                    name: "Difficulty", 
+                    value: problem.difficulty, 
+                    inline: true},
+                {
+                    name: "Likes", 
+                    value: problem.likes.toString(), 
+                    inline: true},
+                {
+                    name: "Dislikes", 
+                    value: problem.dislikes.toString(), 
+                    inline: true},
+                {
+                    name: "Topics", 
+                    value:`${problem.topicTags
+                    .map((top)=>{
+                        return `${top.name}  -  *https://leetcode.com/tag/${top.slug}*`;})
+                        .join("\n")}`}
             );
             
             //ROLE ID: 1264646263408693400; has to be hardcoded into the ping!
-            const embed = await webhook.send({content: "# Good Morning!\nHere's today's daily Leetcode problem! <@&1264646263408693400>\n"+
-                funMessages[randInt(funMessages.length)], embeds: [problemEmbed]}); // gives a little funny message with the announcement
+            const embed = await webhook.send({
+                content: 
+                "# Good Morning!\nHere's today's daily Leetcode problem! <@&1264646263408693400>\n"+
+                funMessages[randInt(funMessages.length)], 
+                embeds: [problemEmbed]
+            }); // gives a little funny message with the announcement
             
             // We have 2 message types from 2 different packages
             // so we have to do this ..thing to convert it
@@ -110,19 +138,32 @@ export async function execute(webhook: WebhookClient) {
                                 name: dateString,
                                 autoArchiveDuration: ThreadAutoArchiveDuration.OneDay
                             });
-
-                            webhook.send({
-                                content: "Make sure to wrap your solution with spoiler tags!",
-                                threadId: thread.id
-                            });
                         });
                 }
-            });
 
-            
+            // We have 2 message types from 2 different packages
+            // so we have to do this ..thing to convert it
+            client.channels.fetch(embed.channel_id).then((channel) => {
+                if (channel && channel.type === ChannelType.GuildText) {
+                    channel.messages.fetch(embed.id).then(async (msg) => {
+                        const thread = await msg.startThread({
+                            name: dateString,
+                            autoArchiveDuration:
+                                ThreadAutoArchiveDuration.OneDay,
+                        });
+
+                        webhook.send({
+                            content:
+                                "Make sure to wrap your solution with spoiler tags!",
+                            threadId: thread.id,
+                        });
+                    });
+                }
+            });
         });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
+    }
+    )} catch (err: any) {
         console.error(err.message);
     } // any error
 }
