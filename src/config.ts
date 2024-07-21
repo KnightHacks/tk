@@ -17,5 +17,3 @@ export const config = {
     DISCORD_CLIENT_ID,
     DISCORD_WEBHOOK_URL,
 };
-
-console.log(config);
