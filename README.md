@@ -9,6 +9,8 @@ The official Knight Hacks Discord Bot, inspired by our new mascot, T.K!
 /duck - sends random duck image!
 /joke - sends a random programming joke!
 /countdown - sends a countdown to the next Knight Hacks event!
+/flowchart - sends a flowchart based on a given major!
+/cats - sends a random image of cat!
 ```
 
 ### Adding a Command
