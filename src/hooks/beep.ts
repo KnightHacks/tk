@@ -3,5 +3,5 @@ import { WebhookClient } from "discord.js";
 // Test webhook command
 export async function execute(webhook: WebhookClient) {
     // Send a hello world message every 10 seconds
-    webhook.send("Beep Boop!");
+    webhook.send("Beep Boopm T.K has joined the server!");
 }
