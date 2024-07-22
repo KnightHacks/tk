@@ -24,15 +24,20 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
-    "@libsql/client": "^0.7.0",
+    "@googleapis/calendar": "^9.7.6",
+    "@napi-rs/canvas": "^0.1.53",
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
+    "googleapis": "^140.0.1",
+    "he": "^1.2.0",
+    "@libsql/client": "^0.7.0",
     "drizzle-orm": "^0.32.0",
     "jimp": "^0.22.12",
     "node-cron": "^3.0.3",
     "node-fetch": "^3.3.2"
   },
   "devDependencies": {
+    "@types/he": "^1.2.3",
     "@types/node": "^18.13.0",
     "@types/node-cron": "^3.0.11",
     "@typescript-eslint/eslint-plugin": "^5.51.0",
@@ -43,6 +48,7 @@
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-n": "^15.0.0",
     "eslint-plugin-promise": "^6.0.0",
+    "gapi-client": "^0.0.3",
     "prettier": "^2.8.4",
     "tsup": "^6.6.0",
     "tsx": "^3.12.3",
