@@ -15,6 +15,7 @@ The official Knight Hacks Discord Bot
 /duck - sends random duck image!
 /dog - sends a random image of a dog!
 /cat - sends a random image of a cat!
+/capybara - sends a random image of a capybara!
 /beep - responds with "Boop!"
 /help - sends a list of available commands
 ```
