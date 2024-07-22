@@ -21,7 +21,7 @@ const url = "https://api.thecatapi.com/v1/images/search?limit=1";
 export async function execute(interaction: CommandInteraction) {
     try {
         const res = await fetch(url);
-        const data = await res.json() as CatProps[];
+        const data = (await res.json()) as CatProps[];
 
         // this code takes in the image and gets the main color of it.
         const img = JIMP.read(data[0].url);
@@ -34,7 +34,7 @@ export async function execute(interaction: CommandInteraction) {
         const g = (color >> 16) & 0xff;
         const b = (color >> 8) & 0xff;
 
-        const hexString = `${((1 << 24) + (r << 16) + (g << 18) + b)
+        const hexString = `${((1 << 24) + (r << 16) + (g << 8) + b)
             .toString(16)
             .slice(1)
             .toUpperCase()}`;
@@ -42,6 +42,7 @@ export async function execute(interaction: CommandInteraction) {
             .setImage(data[0].url)
             .setColor(`#${hexString}`);
         interaction.reply({ embeds: [embed] });
+        console.log(hexString);
 
         // checks the joke type and uses the correct params based on that
         // check the api docs for more info 
