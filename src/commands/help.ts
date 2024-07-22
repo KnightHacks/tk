@@ -38,7 +38,7 @@ export async function execute(interaction: CommandInteraction) {
             },
             {
                 name: "/flowchart",
-                value: "Sends the flowchart for CS, IT, and CE!",
+                value: "Sends the flowchart for CS, IT, CpE, and DS!",
             },
             {
                 name: "/joke",
