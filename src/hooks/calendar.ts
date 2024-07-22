@@ -167,12 +167,12 @@ export async function execute() {
 
             const events = await getValidEvents();
 
-            if (events.length > 0){
-                webhook.send(`Hey everyone, here are some reminders about our upcoming events! <@&${config.CALENDAR_ROLE_ID}>\n`);
+            if (events.length === 0){
                 return;
+            } else if (events.length >= 1) {
+                webhook.send(`Hey everyone, here are some reminders about our upcoming events! <@&${config.CALENDAR_ROLE_ID}>\n`);
             }
 
-            console.log("Number of Valid Events:", events.length);
             events.map((event) => {
                 const prefix = event.range;
                 const date = getDateProps(
@@ -200,14 +200,14 @@ export async function execute() {
                         value: `${date.end}`,
                         inline: true,
                     },
-                ]
+                ];
 
                 if (date.date) {
                     fields.splice(1, 0, {
                         name: "Date",
                         value: `${date.date}`,
                         inline: false,
-                    })
+                    });
                 }
 
                 // Create the embed
@@ -224,7 +224,7 @@ export async function execute() {
                     
                     .setFooter({
                         text: "We hope to see you there! - the Knight Hacks Crew :)"
-                    })
+                    });
                     
                     // Send the message
                     return webhook.send({
