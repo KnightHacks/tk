@@ -10,6 +10,8 @@ const {
     DISCORD_WEBHOOK_URL,
     DAILY_WEBHOOK_URL,
     DAILY_ROLE_ID,
+    DATABASE_URL,
+    DATABASE_AUTH_TOKEN,
 } = process.env;
 
 // Check if the environment variables are set
@@ -18,7 +20,9 @@ if (
     !DISCORD_CLIENT_ID ||
     !DISCORD_WEBHOOK_URL ||
     !DAILY_WEBHOOK_URL ||
-    !DAILY_ROLE_ID
+    !DAILY_ROLE_ID ||
+    !DATABASE_URL ||
+    !DATABASE_AUTH_TOKEN
 ) {
     throw new Error("Missing environment variables");
 }
@@ -30,4 +34,6 @@ export const config = {
     DISCORD_WEBHOOK_URL,
     DAILY_WEBHOOK_URL,
     DAILY_ROLE_ID,
+    DATABASE_URL,
+    DATABASE_AUTH_TOKEN,
 };
