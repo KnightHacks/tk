@@ -13,8 +13,8 @@ interface CatProps {
 } 
 
 export const data = new SlashCommandBuilder()
-    .setName("cats")
-    .setDescription("Generates a cat picture!");
+    .setName("cat")
+    .setDescription("Meow!");
    
 
 const url = "https://api.thecatapi.com/v1/images/search?limit=1";
@@ -42,7 +42,6 @@ export async function execute(interaction: CommandInteraction) {
             .setImage(data[0].url)
             .setColor(`#${hexString}`);
         interaction.reply({ embeds: [embed] });
-        console.log(hexString);
 
         // checks the joke type and uses the correct params based on that
         // check the api docs for more info 
