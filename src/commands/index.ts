@@ -9,6 +9,7 @@ import * as sign_in from "./sign_in";
 import * as leaderboard from "./leaderboard";
 import * as flex from "./flex";
 import * as check_points from "./check_points";
+import * as help from "./help";
 
 // Export all commands
 export const commands = {
@@ -23,4 +24,5 @@ export const commands = {
     leaderboard,
     flex,
     check_points,
+    help,
 };
