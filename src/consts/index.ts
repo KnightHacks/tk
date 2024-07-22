@@ -120,6 +120,11 @@ export const GOATS = [
         image: "https://media.licdn.com/dms/image/C4E03AQEnfECjcUMWIQ/profile-displayphoto-shrink_200_200/0/1627520886959?e=1727308800&v=beta&t=CasbS5O8zABXTxodqFZFZgK4ROqYgHJWeG90hwKLytU",
     },
     {
+        name: "GOATno Fregoso Frias",
+        link: "https://www.linkedin.com/in/brunofregosofrias/",
+        image: "https://media.licdn.com/dms/image/D4E03AQF954TulUw6VQ/profile-displayphoto-shrink_200_200/0/1667198059166?e=1727308800&v=beta&t=pKb20sF7kv40m2V8e2-iuRYY2lCQlKqzqlhSKIIhruQ",
+    },
+    {
         name: "GOATen Snipes",
         link: "https://www.linkedin.com/in/warren-snipes/",
         image: "https://media.licdn.com/dms/image/D5603AQEdWPkwfQ7qUQ/profile-displayphoto-shrink_200_200/0/1686575949990?e=1727308800&v=beta&t=qgRvNIrnj1Mg5wsK17OQreGIVhb6is93Fy9YOtogPJQ",
@@ -133,5 +138,5 @@ export const GOATS = [
         name: "Must GOATmed",
         link: "https://www.linkedin.com/in/mustaeenahmed/",
         image: "https://media.licdn.com/dms/image/D4E03AQEuPTNsWdbMMA/profile-displayphoto-shrink_400_400/0/1696636498138?e=1727308800&v=beta&t=qtheGEkJ3kHdmmOAYfQ4sNyIAK9HsnDW62APPA9QGug",
-    }
+    },
 ];
