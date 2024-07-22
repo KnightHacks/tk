@@ -1,7 +1,7 @@
 import * as beep from "./beep";
 import * as duck from "./duck";
 import * as joke from "./joke";
-import * as cats from "./cats";
+import * as cat from "./cat";
 import * as flowchart from "./flowchart";
 import * as countdown from "./countdown";
 import * as create_event from "./create_event";
@@ -10,13 +10,15 @@ import * as leaderboard from "./leaderboard";
 import * as flex from "./flex";
 import * as check_points from "./check_points";
 import * as help from "./help";
+import * as dog from "./dog";
 
 // Export all commands
 export const commands = {
     beep,
     duck,
     joke,
-    cats,
+    cat,
+    dog,
     flowchart,
     countdown,
     create_event,

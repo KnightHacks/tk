@@ -1,31 +1,29 @@
 import {
     CommandInteraction,
-    SlashCommandBuilder,
     EmbedBuilder,
+    SlashCommandBuilder,
 } from "discord.js";
 import fetch from "node-fetch";
 import JIMP from "jimp";
 
-// DUCK COMMAND
-// Command that posts duck images
-interface DuckProps {
-    message: string;
-    url: string;
-}
+// DOG COMMAND
+// interface for returned data from API
+interface DogProps {
+    message: string,
+};
 
-// Create the command
 export const data = new SlashCommandBuilder()
-    .setName("duck")
-    .setDescription("Quack!");
+    .setName("dog")
+    .setDescription("Bark!");
 
-const url = "https://random-d.uk/api/v2/quack";
+const url = "https://dog.ceo/api/breeds/image/random";
 export async function execute(interaction: CommandInteraction) {
     try {
         const res = await fetch(url);
-        const data = (await res.json()) as DuckProps;
+        const data = (await res.json()) as DogProps;
 
         // gets the average color of the image and makes it the embed color
-        const img = JIMP.read(data.url);
+        const img = JIMP.read(data.message);
         const width = (await img).getWidth(),
             height = (await img).getHeight();
         const color = (await img).getPixelColor(width / 2, height / 2);
@@ -39,7 +37,7 @@ export async function execute(interaction: CommandInteraction) {
             .slice(1)
             .toUpperCase()}`;
         const embed = new EmbedBuilder()
-            .setImage(data.url)
+            .setImage(data.message)
             .setColor(`#${hexString}`);
         interaction.reply({ embeds: [embed] });
     } catch (err: any) {
