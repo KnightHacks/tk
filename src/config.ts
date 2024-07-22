@@ -14,6 +14,8 @@ const {
     GOOGLE_CALENDAR_ID,
     CALENDAR_WEBHOOK_URL,
     CALENDAR_ROLE_ID,
+    DATABASE_URL,
+    DATABASE_AUTH_TOKEN,
 } = process.env;
 
 // Check if the environment variables are set
@@ -26,7 +28,9 @@ if (
     !GOOGLE_API_KEY ||
     !GOOGLE_CALENDAR_ID ||
     !CALENDAR_ROLE_ID ||
-    !CALENDAR_WEBHOOK_URL
+    !CALENDAR_WEBHOOK_URL ||
+    !DATABASE_URL ||
+    !DATABASE_AUTH_TOKEN
 ) {
     throw new Error("Missing environment variables");
 }
@@ -42,4 +46,6 @@ export const config = {
     GOOGLE_CALENDAR_ID,
     CALENDAR_WEBHOOK_URL,
     CALENDAR_ROLE_ID,
+    DATABASE_URL,
+    DATABASE_AUTH_TOKEN,
 };
