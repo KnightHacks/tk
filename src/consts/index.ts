@@ -15,5 +15,5 @@ export const DAILY_MESSAGES = [
     "Take a shower after this...",
     "Let's flex your brain muscles! 💪👅😈",
     "𝓛𝓮𝓽'𝓼 𝓬𝓸𝓭𝓮 𝓿𝓻𝓸 ❤️‍🔥⛓️👅",
-    "I'm 𝓯𝓻𝓮𝓪𝓴𝔂 KnightHacks bot! 🛡️👅",
+    "I'm 𝓯𝓻𝓮𝓪𝓴𝔂 Knight Hacks bot! 🛡️👅",
 ];
