@@ -17,6 +17,7 @@ The official Knight Hacks Discord Bot
 /cat - sends a random image of a cat!
 /capybara - sends a random image of a capybara!
 /beep - responds with "Boop!"
+/goat - responds with a random image of a goat!
 /help - sends a list of available commands
 ```
 

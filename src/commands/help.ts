@@ -65,6 +65,10 @@ export async function execute(interaction: CommandInteraction) {
                 value: "Capybara noises!",
             },
             {
+                name: "/goat",
+                value: "G.O.A.T.!",
+            },
+            {
                 name: "/help",
                 value: "Shows this list of helpful commands!",
             },
