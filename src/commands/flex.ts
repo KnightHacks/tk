@@ -1,12 +1,9 @@
 import {
     CommandInteraction,
-    PermissionsBitField,
     SlashCommandBuilder,
     EmbedBuilder,
 } from "discord.js";
 import db from "../db/db";
-import { users } from "../db/schema";
-import { eq } from "drizzle-orm";
 
 // SIGN IN EVENT COMMAND
 // Command to sign into an event

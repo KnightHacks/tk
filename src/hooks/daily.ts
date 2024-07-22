@@ -64,7 +64,7 @@ export async function execute() {
 
     try {
         // Create a cron job that will run at 11:00 AM every day
-        cron.schedule("0 11 * * *", async () => {
+        cron.schedule("0 15 * * *", async () => {
             // Fetch the problem data and format the data
             const problem = (await fetchData(url)) as DailyProblemProps;
             const date = problem.date.split("-");

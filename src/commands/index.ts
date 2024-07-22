@@ -11,6 +11,7 @@ import * as flex from "./flex";
 import * as check_points from "./check_points";
 import * as help from "./help";
 import * as dog from "./dog";
+import * as capybara from "./capybara";
 
 // Export all commands
 export const commands = {
@@ -27,4 +28,5 @@ export const commands = {
     flex,
     check_points,
     help,
+    capybara,
 };

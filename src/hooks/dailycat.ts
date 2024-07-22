@@ -35,7 +35,7 @@ export async function execute() {
     });
 
     try {
-        cron.schedule("0 13 * * *", async () => {
+        cron.schedule("0 17 * * *", async () => {
             const catImageData = await fetchCatImage(url);
 
             const img = JIMP.read(catImageData[0].url);

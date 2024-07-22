@@ -25,21 +25,25 @@
   },
   "dependencies": {
     "@googleapis/calendar": "^9.7.6",
+    "@libsql/client": "^0.7.0",
     "@napi-rs/canvas": "^0.1.53",
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
+    "drizzle-orm": "^0.32.0",
     "googleapis": "^140.0.1",
     "he": "^1.2.0",
-    "@libsql/client": "^0.7.0",
-    "drizzle-orm": "^0.32.0",
     "jimp": "^0.22.12",
+    "libsql": "*",
     "node-cron": "^3.0.3",
-    "node-fetch": "^3.3.2"
+    "node-fetch": "^3.3.2",
+    "perf_hooks": "^0.0.1"
   },
   "devDependencies": {
     "@types/he": "^1.2.3",
+    "@types/jimp": "^0.2.1",
     "@types/node": "^18.13.0",
     "@types/node-cron": "^3.0.11",
+    "@types/node-fetch": "^2.6.11",
     "@typescript-eslint/eslint-plugin": "^5.51.0",
     "@typescript-eslint/parser": "^5.51.0",
     "drizzle-kit": "^0.23.0",
