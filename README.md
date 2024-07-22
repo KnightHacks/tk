@@ -13,8 +13,8 @@ The official Knight Hacks Discord Bot
 /flowchart - sends a flowchart based on a given major!
 /joke - sends a random programming joke!
 /duck - sends random duck image!
-/dogs - sends a random image of a dog!
-/cats - sends a random image of a cat!
+/dog - sends a random image of a dog!
+/cat - sends a random image of a cat!
 /beep - responds with "Boop!"
 /help - sends a list of available commands
 ```

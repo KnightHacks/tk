@@ -54,7 +54,11 @@ export async function execute(interaction: CommandInteraction) {
             },
             {
                 name: "/cat",
-                value: "Sends a random cat image!",
+                value: "Meow!",
+            },
+            {
+                name: "/dog",
+                value: "Bark!",
             },
             {
                 name: "/help",
