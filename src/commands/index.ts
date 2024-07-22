@@ -12,6 +12,7 @@ import * as check_points from "./check_points";
 import * as help from "./help";
 import * as dog from "./dog";
 import * as capybara from "./capybara";
+import * as goat from "./goat";
 
 // Export all commands
 export const commands = {
@@ -29,4 +30,5 @@ export const commands = {
     check_points,
     help,
     capybara,
+    goat,
 };
