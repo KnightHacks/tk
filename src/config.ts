@@ -10,6 +10,10 @@ const {
     DISCORD_WEBHOOK_URL,
     DAILY_WEBHOOK_URL,
     DAILY_ROLE_ID,
+    GOOGLE_API_KEY,
+    GOOGLE_CALENDAR_ID,
+    CALENDAR_WEBHOOK_URL,
+    CALENDAR_ROLE_ID,
 } = process.env;
 
 // Check if the environment variables are set
@@ -18,7 +22,11 @@ if (
     !DISCORD_CLIENT_ID ||
     !DISCORD_WEBHOOK_URL ||
     !DAILY_WEBHOOK_URL ||
-    !DAILY_ROLE_ID
+    !DAILY_ROLE_ID ||
+    !GOOGLE_API_KEY ||
+    !GOOGLE_CALENDAR_ID ||
+    !CALENDAR_ROLE_ID ||
+    !CALENDAR_WEBHOOK_URL
 ) {
     throw new Error("Missing environment variables");
 }
@@ -30,4 +38,8 @@ export const config = {
     DISCORD_WEBHOOK_URL,
     DAILY_WEBHOOK_URL,
     DAILY_ROLE_ID,
+    GOOGLE_API_KEY,
+    GOOGLE_CALENDAR_ID,
+    CALENDAR_WEBHOOK_URL,
+    CALENDAR_ROLE_ID,
 };
