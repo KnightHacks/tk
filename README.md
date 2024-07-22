@@ -5,6 +5,10 @@ The official Knight Hacks Discord Bot, inspired by our new mascot, T.K!
 ## Commands
 
 ```bash
+/sign_in - signs into a Knight Hacks event
+/check_points - check your Knight Hacks points
+/leaderboard - shows the Knight Hacks points leaderboard
+/flex - publicly flexes your Knight Hacks points
 /beep - responds with "Boop!"
 /duck - sends random duck image!
 /joke - sends a random programming joke!
