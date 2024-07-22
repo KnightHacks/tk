@@ -23,7 +23,11 @@ export const data = new SlashCommandBuilder()
                 { 
                     name: "Computer Engineering", 
                     value: "Computer Engineering" 
-                }
+                },
+                {
+                    name: "Data Science",
+                    value: "Data Science",
+                },
             ));
 
 
@@ -44,6 +48,9 @@ export async function execute(interaction: CommandInteraction) {
             break;
         case "Computer Engineering":
             flowchartState = "https://i.imgur.com/OxCyt2j.png";
+            break;
+        case "Data Science":
+            flowchartState = "https://i.imgur.com/pohVTQA.png";
             break;
         default:
             flowchartState = "";
