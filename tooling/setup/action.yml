@@ -1,0 +1,12 @@
+name: "Setup and install"
+description: "Setup node and npm install"
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 18
+    
+    - shell: bash
+      run: npm install
