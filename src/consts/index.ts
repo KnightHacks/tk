@@ -34,11 +34,11 @@ export const GOATS = [
     //     link: "https://www.linkedin.com/in/brunix-michel/",
     //     image: "https://media.licdn.com/dms/image/C4D03AQELV5pjTQCo4Q/profile-displayphoto-shrink_200_200/0/1581982065691?e=1727308800&v=beta&t=PAcG0za3pyMXpXGwP_vy46K5xBuoie3fYWQkndpg-gE",
     // },
-    // {
-    //     name: "DylGOAT Vidal",
-    //     link: "https://www.linkedin.com/in/dylanvidal1204/",
-    //     image: "https://media.licdn.com/dms/image/D4E03AQEclt1-B-Rxcg/profile-displayphoto-shrink_200_200/0/1695605816206?e=1727308800&v=beta&t=BXGMts9rVNeaD-JkNs1s2vbh8aSLYfXRwZsEn8VMBXA",
-    // },
+    {
+        name: "DylGOAT Vidal",
+        link: "https://www.linkedin.com/in/dylanvidal1204/",
+        image: "https://media.licdn.com/dms/image/D4E03AQEclt1-B-Rxcg/profile-displayphoto-shrink_200_200/0/1695605816206?e=1727308800&v=beta&t=BXGMts9rVNeaD-JkNs1s2vbh8aSLYfXRwZsEn8VMBXA",
+    },
     // {
     //     name: "Leonard GOATman",
     //     link: "https://www.linkedin.com/in/leonard-gofman-208578236/",
@@ -134,9 +134,9 @@ export const GOATS = [
     //     link: "https://www.linkedin.com/in/adamess123/",
     //     image: "https://media.licdn.com/dms/image/C4D03AQFLAo1qYEbnsw/profile-displayphoto-shrink_200_200/0/1646399578746?e=1727308800&v=beta&t=aCyV8eYyzOw4x0NTHPzIGfXJMoPcQ6-t_wJWUFTWuvE",
     // },
-    {
-        name: "Must GOATmed",
-        link: "https://www.linkedin.com/in/mustaeenahmed/",
-        image: "https://media.licdn.com/dms/image/D4E03AQEuPTNsWdbMMA/profile-displayphoto-shrink_400_400/0/1696636498138?e=1727308800&v=beta&t=qtheGEkJ3kHdmmOAYfQ4sNyIAK9HsnDW62APPA9QGug",
-    },
+    // {
+    //     name: "Must GOATmed",
+    //     link: "https://www.linkedin.com/in/mustaeenahmed/",
+    //     image: "https://media.licdn.com/dms/image/D4E03AQEuPTNsWdbMMA/profile-displayphoto-shrink_400_400/0/1696636498138?e=1727308800&v=beta&t=qtheGEkJ3kHdmmOAYfQ4sNyIAK9HsnDW62APPA9QGug",
+    // },
 ];
