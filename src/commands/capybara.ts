@@ -47,7 +47,10 @@ export async function execute(interaction: CommandInteraction) {
             );
         interaction.reply({ embeds: [embed] });
         // catch any errors
-    } catch (err: any) {
-        console.error(err.message);
+    } catch (err: unknown) {
+        // silences eslint. type safety with our errors basically
+        err instanceof Error ? 
+            console.error(err.message) : 
+            console.error("An unknown error occurred: ", err);
     }
 }
