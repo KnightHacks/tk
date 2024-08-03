@@ -73,6 +73,10 @@ export async function execute(interaction: CommandInteraction) {
                 value: "G.O.A.T.!",
             },
             {
+                name: "/bubblewrap",
+                value: "Gives you some bubble wrap!",
+            },
+            {
                 name: "/help",
                 value: "Shows this list of helpful commands!",
             },
