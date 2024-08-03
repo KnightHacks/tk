@@ -21,6 +21,10 @@ export async function execute(interaction: CommandInteraction) {
                 value: "Shows the countdown until Knight Hacks VII",
             },
             {
+                name: "/links",
+                value: "Shows our most important links, with lots of information!",
+            },
+            {
                 name: "/sign_in",
                 value: "Signs you in to an event!",
             },

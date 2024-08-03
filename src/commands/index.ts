@@ -14,6 +14,7 @@ import * as dog from "./dog";
 import * as capybara from "./capybara";
 import * as goat from "./goat";
 import * as bubblewrap from "./bubblewrap";
+import * as links from "./links";
 
 // Export all commands
 export const commands = {
@@ -33,4 +34,5 @@ export const commands = {
     capybara,
     goat,
     bubblewrap,
+    links,
 };

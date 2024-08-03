@@ -6,6 +6,7 @@ The official Knight Hacks Discord Bot
 
 ```bash
 /countdown - sends a countdown to the next Knight Hacks event!
+/links - sends our most important links!
 /sign_in - signs into a Knight Hacks event
 /check_points - check your Knight Hacks points
 /leaderboard - shows the Knight Hacks points leaderboard
