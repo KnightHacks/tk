@@ -13,11 +13,8 @@ import * as help from "./help";
 import * as dog from "./dog";
 import * as capybara from "./capybara";
 import * as goat from "./goat";
-<<<<<<< HEAD
 import * as links from "./links";
-=======
 import * as bubblewrap from "./bubblewrap";
->>>>>>> 5f54e82 (added bubble wrap command)
 
 // Export all commands
 export const commands = {
@@ -36,9 +33,6 @@ export const commands = {
     help,
     capybara,
     goat,
-<<<<<<< HEAD
     links,
-=======
     bubblewrap,
->>>>>>> 5f54e82 (added bubble wrap command)
 };
