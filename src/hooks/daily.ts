@@ -35,7 +35,7 @@ const url = "https://alfa-leetcode-api.onrender.com/daily";
 // const channelId = "1263954540089180231";
 
 // Function to fetch the Daily Problem
-const fetchData = async (url: any): Promise<DailyProblemProps> => {
+const fetchData = async (url: string): Promise<DailyProblemProps> => {
     try {
         const res = await fetch(url);
 
@@ -136,7 +136,10 @@ export async function execute() {
                 }
             });
         });
-    } catch (err: any) {
-        console.error(err.message);
-    } // any error
+    } catch (err: unknown) {
+        // silences eslint. type safety with our errors basically
+        err instanceof Error ? 
+        console.error(err.message) : 
+        console.error("An unknown error occurred: ", err);
+    }
 }

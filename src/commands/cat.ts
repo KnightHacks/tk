@@ -48,7 +48,10 @@ export async function execute(interaction: CommandInteraction) {
         // (https://developers.thecatapi.com/view-account/ylX4blBYT9FaoVd6OhvR?report=bOoHBz-8t)
 
     // catch any errors
-    } catch (err: any) {
-        console.error(err.message);
+    } catch (err: unknown) {
+        // silences eslint. type safety with our errors basically
+        err instanceof Error ? 
+        console.error(err.message) : 
+        console.error("An unknown error occurred: ", err);
     }
 }

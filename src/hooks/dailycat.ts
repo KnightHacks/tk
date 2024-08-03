@@ -13,7 +13,7 @@ interface CatProps {
 
 const url = "https://api.thecatapi.com/v1/images/search?limit=1";
 
-const fetchCatImage = async (url: any) => {
+const fetchCatImage = async (url: string) => {
     try {
         const res = await fetch(url);
 
@@ -27,7 +27,7 @@ const fetchCatImage = async (url: any) => {
         console.log(`Error" ${err}`);
         throw err;
     }
-}
+};
 
 export async function execute() {
     const webhook = new WebhookClient({
@@ -61,8 +61,11 @@ export async function execute() {
                 embeds: [catEmbed]
             });
         });
-    } catch (err: any) {
-        console.error(err.message);
+    } catch (err: unknown) {
+        // silences eslint. type safety with our errors basically
+        err instanceof Error ? 
+        console.error(err.message) : 
+        console.error("An unknown error occurred: ", err);
     }
 }
 
