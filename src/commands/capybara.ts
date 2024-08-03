@@ -5,7 +5,6 @@ import {
 } from "discord.js";
 import fetch from "node-fetch";
 import JIMP from "jimp";
-import { performance } from "perf_hooks";
 
 // CAPYBARA COMMAND
 //  interface for returned data from API

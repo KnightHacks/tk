@@ -19,6 +19,7 @@ The official Knight Hacks Discord Bot
 /capybara - sends a random image of a capybara!
 /beep - responds with "Boop!"
 /goat - responds with a random image of a goat!
+/bubblewrap - gives you some bubble wrap!
 /help - sends a list of available commands
 ```
 
