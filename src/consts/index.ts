@@ -140,3 +140,11 @@ export const GOATS = [
         image: "https://media.licdn.com/dms/image/D4E03AQEuPTNsWdbMMA/profile-displayphoto-shrink_400_400/0/1696636498138?e=1727308800&v=beta&t=qtheGEkJ3kHdmmOAYfQ4sNyIAK9HsnDW62APPA9QGug",
     },
 ];
+
+export const LINKS = [
+    "• [**Sign up for KnightHacks VII!**](https://2024.knighthacks.org/)",
+    "• [**Check out our events calendar!**](https://calendar.google.com/calendar/u/0/r?cid=Y18wYjlkZjJiMDA2MmE1ZDcxMWZjMTYwNjBmZjMyODZlZjQwNGIxNzRiZmFmYzRjYmRkNGUzMDA5ZTkxNTM2ZTk0QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20)",
+    "• [**Follow us on LinkedIn!**](https://www.linkedin.com/company/knight-hacks/posts/?feedView=all)",
+    "• [**Follow us on Instagram!**](https://www.instagram.com/knighthacks)",
+    "[*For more links...*](https://linktr.ee/knighthacks)",
+];
