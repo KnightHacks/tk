@@ -42,7 +42,10 @@ export async function execute(interaction: CommandInteraction) {
             .setImage(data.url)
             .setColor(`#${hexString}`);
         interaction.reply({ embeds: [embed] });
-    } catch (err: any) {
-        console.error(err.message);
+    } catch (err: unknown) {
+        // silences eslint. type safety with our errors basically
+        err instanceof Error ? 
+            console.error(err.message) : 
+            console.error("An unknown error occurred: ", err);    
     }
 }

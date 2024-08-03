@@ -29,7 +29,10 @@ export async function execute(interaction: CommandInteraction) {
         } else if (data.type === "twopart") {
             return interaction.reply(data.setup + "\n" + data.delivery);
         }
-    } catch (err: any) {
-        console.error(err.message);
+    } catch (err: unknown) {
+        // silences eslint. type safety with our errors basically
+        err instanceof Error ? 
+        console.error(err.message) : 
+        console.error("An unknown error occurred: ", err);
     }
 }

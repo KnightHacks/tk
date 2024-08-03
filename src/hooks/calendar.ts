@@ -36,11 +36,11 @@ interface TimeProps {
 
 // Google maps API URL
 const url = 
-`https://www.googleapis.com/calendar/v3/calendars/${config.GOOGLE_CALENDAR_ID}/events?key=${config.GOOGLE_API_KEY}`
+`https://www.googleapis.com/calendar/v3/calendars/${config.GOOGLE_CALENDAR_ID}/events?key=${config.GOOGLE_API_KEY}`;
 
 
 // Function to fetch all of the events
-const fetchEvents = async (url: any) => {
+const fetchEvents = async (url: string) => {
     try {
         const res = await fetch(url);
 
@@ -233,7 +233,10 @@ export async function execute() {
             });
         });
     // Catch any errors
-    } catch (err: any) {
-        console.error(err.message);
+    } catch (err: unknown) {
+        // silences eslint. type safety with our errors basically
+        err instanceof Error ? 
+        console.error(err.message) : 
+        console.error("An unknown error occurred: ", err);
     }
 }
