@@ -1,6 +1,5 @@
 import {
     CommandInteraction,
-    PermissionsBitField,
     SlashCommandBuilder,
 } from "discord.js";
 import db from "../db/db";
