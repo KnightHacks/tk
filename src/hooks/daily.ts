@@ -139,7 +139,7 @@ export async function execute() {
     } catch (err: unknown) {
         // silences eslint. type safety with our errors basically
         err instanceof Error ? 
-        console.error(err.message) : 
-        console.error("An unknown error occurred: ", err);
+            console.error(err.message) : 
+            console.error("An unknown error occurred: ", err);
     }
 }

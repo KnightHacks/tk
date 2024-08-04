@@ -1,4 +1,4 @@
-import { Client, WebhookClient } from "discord.js";
+import { Client } from "discord.js";
 import { config } from "./config";
 import { commands } from "./commands";
 import { deployCommands } from "./deploy-commands";

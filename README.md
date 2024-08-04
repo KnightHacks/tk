@@ -36,6 +36,7 @@ After adding a new command, please update `commands/index.ts` accordingly. View 
 ```bash
 - calendar - sends a daily message to the reminders channel informing users of events today, tomorrow, and in a week
 - daily - sends a daily message containing the Leetcode daily challenge and starts a thread
+- animals - sends daily images of several animals throughout the day
 ```
 
 ### Adding a Hook
