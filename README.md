@@ -5,6 +5,7 @@ The official Knight Hacks Discord Bot
 ## Commands
 
 ```bash
+/chat - chat with T.K!
 /countdown - sends a countdown to the next Knight Hacks event!
 /links - sends our most important links!
 /sign_in - signs into a Knight Hacks event
