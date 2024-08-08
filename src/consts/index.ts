@@ -15,7 +15,7 @@ export const DAILY_MESSAGES = [
     "Take a shower after this...",
     "Let's flex your brain muscles! 💪👅😈",
     "𝓛𝓮𝓽'𝓼 𝓬𝓸𝓭𝓮 𝓿𝓻𝓸 ❤️‍🔥⛓️👅",
-    "I'm 𝓯𝓻𝓮𝓪𝓴𝔂 Knight Hacks bot! 🛡️👅",
+    "I'm 𝓯𝓻𝓮𝓪𝓴𝔂 T.K! 🛡️👅",
 ];
 
 export const GOATS = [
@@ -147,4 +147,28 @@ export const LINKS = [
     "• [**Follow us on LinkedIn!**](https://www.linkedin.com/company/knight-hacks/posts/?feedView=all)",
     "• [**Follow us on Instagram!**](https://www.instagram.com/knighthacks)",
     "[*For more links...*](https://linktr.ee/knighthacks)",
+];
+
+export const CHAT_RESPONES = [
+    "Hey there! Ready to tackle some code?",
+    "Let's make magic happen today!",
+    "Need a hand? T.K is here to help!",
+    "Got a challenge? We've got this!",
+    "Coding adventure awaits!",
+    "Keep calm and code on!",
+    "Every bug is a step closer to greatness!",
+    "T.K at your service, friend!",
+    "Let's build something amazing!",
+    "Ready for a coding quest?",
+    "Let's conquer this together!",
+    "Always here to lend a hand!",
+    "What's our mission today?",
+    "Happy coding, my friend!",
+    "Together, we're unstoppable!",
+    "I cannot WAIT for Knight Hacks VII!",
+    "Nothing a debugger can't fix...",
+    "Ready to set sail? I sure am!",
+    "Do you know how to sail? I sure don't!",
+    "Dev team did a great job with my CV algorithm. You look great!",
+    "Anyone know where Lenny is?",
 ];

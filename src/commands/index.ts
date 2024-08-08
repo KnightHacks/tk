@@ -15,9 +15,11 @@ import * as capybara from "./capybara";
 import * as goat from "./goat";
 import * as links from "./links";
 import * as bubblewrap from "./bubblewrap";
+import * as chat from "./chat";
 
 // Export all commands
 export const commands = {
+    chat,
     beep,
     duck,
     joke,
