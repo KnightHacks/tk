@@ -1,9 +1,6 @@
-import {
-    CommandInteraction,
-    SlashCommandBuilder,
-} from "discord.js";
-import db from "../db/db";
-import { events, users, usersToEvents } from "../db/schema";
+import { CommandInteraction, SlashCommandBuilder } from "discord.js";
+import db from "../events_db/db";
+import { events, users, usersToEvents } from "../events_db/schema";
 import { and, eq } from "drizzle-orm";
 
 // SIGN IN EVENT COMMAND

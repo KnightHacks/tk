@@ -1,5 +1,5 @@
 import { CommandInteraction, SlashCommandBuilder } from "discord.js";
-import db from "../db/db";
+import db from "../events_db/db";
 
 // CHECK POINTS COMMAND
 // Command to check your number of points
