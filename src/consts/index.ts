@@ -142,8 +142,8 @@ export const GOATS = [
 ];
 
 export const LINKS = [
-    "• [**Sign up for KnightHacks VII!**](https://2024.knighthacks.org/)",
-    "• [**Check out our events calendar!**](https://calendar.google.com/calendar/u/0/r?cid=Y18wYjlkZjJiMDA2MmE1ZDcxMWZjMTYwNjBmZjMyODZlZjQwNGIxNzRiZmFmYzRjYmRkNGUzMDA5ZTkxNTM2ZTk0QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20)",
+    "• [**Visit the Hackers Guide!**](https://knight-hacks.notion.site/Hackers-Guide-Knight-Hacks-VII-9e103bd7de114151887e0da523076ecd?pvs=4)",
+    "• [**Check out our Hackathon event Calendar!!**](https://calendar.google.com/calendar/u/1?cid=Y19mMTcxYmJlODE4ODgwYmFkYjUzMTdkNmVmYWVjZTAxNGYxMmM4MmM2Y2I5OGQyYmYzNzEzZGQ5YTllMWYzNjhkQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20)",
     "• [**Follow us on LinkedIn!**](https://www.linkedin.com/company/knight-hacks/posts/?feedView=all)",
     "• [**Follow us on Instagram!**](https://www.instagram.com/knighthacks)",
     "[*For more links...*](https://linktr.ee/knighthacks)",

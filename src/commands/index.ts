@@ -3,7 +3,6 @@ import * as duck from "./duck";
 import * as joke from "./joke";
 import * as cat from "./cat";
 import * as flowchart from "./flowchart";
-import * as countdown from "./countdown";
 import * as create_event from "./create_event";
 import * as sign_in from "./sign_in";
 import * as leaderboard from "./leaderboard";
@@ -26,7 +25,6 @@ export const commands = {
     cat,
     dog,
     flowchart,
-    countdown,
     create_event,
     sign_in,
     leaderboard,

@@ -17,8 +17,12 @@ export async function execute(interaction: CommandInteraction) {
         color: 0x33e0ff,
         fields: [
             {
-                name: "/countdown",
-                value: "Shows the countdown until Knight Hacks VII",
+                name: "/check_in",
+                value: "Check into the hackathon!"
+            },
+            {
+                name: "/badge",
+                value: "View your group badge!"
             },
             {
                 name: "/links",
