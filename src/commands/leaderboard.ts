@@ -3,7 +3,7 @@ import {
     SlashCommandBuilder,
     EmbedBuilder,
 } from "discord.js";
-import db from "../events_db/db";
+import db from "../db/db";
 // SIGN IN EVENT COMMAND
 // Command to sign into an event
 

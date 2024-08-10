@@ -1,6 +1,6 @@
 import { CommandInteraction, SlashCommandBuilder } from "discord.js";
-import db from "../events_db/db";
-import { events, users, usersToEvents } from "../events_db/schema";
+import db from "../db/db";
+import { events, eventUsers, users, usersToEvents } from "../db/schema";
 import { and, eq } from "drizzle-orm";
 
 // SIGN IN EVENT COMMAND
@@ -34,26 +34,16 @@ export async function execute(interaction: CommandInteraction) {
     }
 
     // Check if this is a first time user
-    const user = await db.query.users.findFirst({
+    const user = await db.query.eventUsers.findFirst({
         where: (table, { eq }) => eq(table.discord_id, interaction.user.id),
     });
 
     // If the user does not exist, create a new user. If they do, then update their information
     let result;
     if (!user) {
-        // Create a new user
-        result = await db
-            .insert(users)
-            .values({
-                discord_id: interaction.user.id,
-                username: interaction.user.username,
-                points: event.point_value,
-            })
-            .returning();
-
         // Respond with a success status
-        interaction.reply({
-            content: "You're signed in!",
+        return interaction.reply({
+            content: "Please run /check_in to register with our event!",
             ephemeral: true,
         });
     } else {
@@ -68,6 +58,7 @@ export async function execute(interaction: CommandInteraction) {
                     eq(usersToEvents.event_id, event.id)
                 )
             );
+        console.log(usersToEvent.length);
         if (usersToEvent.length > 0) {
             return interaction.reply({
                 content:
@@ -77,13 +68,13 @@ export async function execute(interaction: CommandInteraction) {
         }
 
         result = await db
-            .update(users)
+            .update(eventUsers)
             .set({
                 username: interaction.user.username,
                 num_attended: user.num_attended + 1,
                 points: user.points + event.point_value,
             })
-            .where(eq(users.discord_id, interaction.user.id))
+            .where(eq(eventUsers.discord_id, interaction.user.id))
             .returning();
 
         // Respond with a success status
@@ -92,7 +83,6 @@ export async function execute(interaction: CommandInteraction) {
             ephemeral: true,
         });
     }
-
     // Update the event's number of attendees
     await db
         .update(events)
@@ -102,6 +92,9 @@ export async function execute(interaction: CommandInteraction) {
         .where(eq(events.id, event.id));
 
     // Update users_to_events table
+    const userId = result[0].id;
+    const eventId = event.id;
+
     try {
         await db.insert(usersToEvents).values({
             user_id: result[0].id,

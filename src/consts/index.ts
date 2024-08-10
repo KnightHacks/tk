@@ -590,6 +590,7 @@ export const COUNTRIES = [
 export const APPLICATION_STATUSES = [
     "pending",
     "accepted",
+    "confirmed",
     "waitlisted",
     "checkedin",
 ] as const;

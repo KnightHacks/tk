@@ -206,8 +206,9 @@ export const eventsRelations = relations(events, ({ many }) => ({
 }));
 
 // Users table
-export const events_users = sqliteTable("users", {
+export const eventUsers = sqliteTable("event_users", {
     id: integer("id").primaryKey({ autoIncrement: true }),
+    group_id: integer("group_id").notNull(),
     discord_id: text("discord_id").notNull(),
     username: text("username").notNull(),
     points: integer("points").notNull().default(0),
@@ -215,16 +216,16 @@ export const events_users = sqliteTable("users", {
 });
 
 // One user can attend many events
-export const usersEventsRelations = relations(users, ({ many }) => ({
+export const eventUsersRelations = relations(eventUsers, ({ many }) => ({
     usersToEvents: many(usersToEvents),
 }));
 
 export const usersToEvents = sqliteTable(
-    "users_to_events",
+    "user_to_events",
     {
         user_id: integer("user_id")
             .notNull()
-            .references(() => users.id),
+            .references(() => eventUsers.id),
         event_id: integer("event_id")
             .notNull()
             .references(() => events.id),
@@ -239,8 +240,18 @@ export const usersToEventsRelations = relations(usersToEvents, ({ one }) => ({
         fields: [usersToEvents.event_id],
         references: [events.id],
     }),
-    user: one(users, {
+    event_user: one(eventUsers, {
         fields: [usersToEvents.user_id],
-        references: [users.id],
+        references: [eventUsers.id],
     }),
 }));
+
+// GROUP SCHEMA
+// Eight groups, each storing the group name, ROLE ID, and many users
+export const groups = sqliteTable("groups", {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    name: text("name").notNull(),
+    role_id: text("role_id").notNull(),
+    number_of_users: integer("number_of_users").notNull().default(0),
+    image: text("image_url"),
+});

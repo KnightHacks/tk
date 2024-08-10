@@ -15,6 +15,8 @@ import * as capybara from "./capybara";
 import * as goat from "./goat";
 import * as links from "./links";
 import * as bubblewrap from "./bubblewrap";
+import * as check_in from "./check_in";
+import * as badge from "./badge";
 
 // Export all commands
 export const commands = {
@@ -35,4 +37,6 @@ export const commands = {
     goat,
     links,
     bubblewrap,
+    check_in,
+    badge,
 };

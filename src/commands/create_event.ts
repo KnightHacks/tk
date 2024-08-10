@@ -3,8 +3,8 @@ import {
     PermissionsBitField,
     SlashCommandBuilder,
 } from "discord.js";
-import db from "../events_db/db";
-import { events } from "../events_db/schema";
+import db from "../db/db";
+import { events } from "../db/schema";
 
 // CREATE EVENT COMMAND
 // Command to create an event

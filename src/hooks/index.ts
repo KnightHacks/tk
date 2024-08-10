@@ -7,6 +7,5 @@ import { execute as animals } from "./animals";
 export const hooks = {
     //beep,
     calendar,
-    daily,
     animals,
 };
