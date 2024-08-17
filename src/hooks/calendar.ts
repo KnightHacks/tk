@@ -207,7 +207,7 @@ export async function execute() {
                     .setTitle(event.summary)
                     .setURL(event.htmlLink)
                     .setAuthor({
-                        name: `Theres a new event ${prefix}!`,
+                        name: `${prefix}!`,
                         iconURL: "https://i.imgur.com/0BR5rSn.png",
                     })
                     .setDescription(he.decode(event.description ?? "TBA"))
