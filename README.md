@@ -30,7 +30,7 @@ The commands are stored in the `commands` directory. To add a new command, creat
 
 Your new command must have a data export, which is a SlashCommandBuilder object from the discord.js library. The command should also have an execute function that takes in the interaction object and sends a response back to the user.
 
-After adding a new command, please update `commands/index.ts` accordingly. View commands/beep.ts for an example.
+After adding a new command, please update `commands/index.ts` and README.md accordingly. View commands/beep.ts for an example.
 
 ## Hooks
 
@@ -40,8 +40,19 @@ After adding a new command, please update `commands/index.ts` accordingly. View 
 - animals - sends daily images of several animals throughout the day
 ```
 
+### Hooks Schedule
+```bash
+- daily - sent daily at 11:00AM
+- calendar - sent daily at 12:00PM, only when there is an event that occurs today, tomorrow, or in a week.
+- animals
+    - cat - sent daily at 1:00PM
+    - capybara - sent daily at 1:30PM
+    - duck - sent daily at 2:00PM
+    - goat - sent daily at 2:30PM
+```
+
 ### Adding a Hook
 
 Some logic needs to depend on something other than a command interaction and should be stored in a hook instead. Hooks are stored in the `hooks` directory and are lodaded in by the main function.
 
-Your hook needs to be a function called execute, and should create its own webhook client in its own scope. After adding a new hook, please update `hooks/index.ts` accordingly. View hooks/calendar.ts for an example.
+Your hook needs to be a function called execute, and should create its own webhook client in its own scope. After adding a new hook, please update `hooks/index.ts` and README.md accordingly. View hooks/calendar.ts for an example.
