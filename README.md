@@ -42,6 +42,7 @@ After adding a new command, please update `commands/index.ts` and README.md acco
 
 ### Hooks Schedule
 ```bash
+(all times in EST)
 - daily - sent daily at 11:00AM
 - calendar - sent daily at 12:00PM, only when there is an event that occurs today, tomorrow, or in a week.
 - animals
