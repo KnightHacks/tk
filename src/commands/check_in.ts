@@ -102,16 +102,18 @@ export async function execute(interaction: CommandInteraction) {
     const role = guild?.roles.cache.find(
         (role) => role.id === minGroup.role_id
     ) as RoleResolvable;
+    const role2 = guild?.roles.cache.find(
+        (role) => role.id === "1271660341461520426"
+    ) as RoleResolvable;
     const member = interaction.member;
     const memberRoles = member?.roles as GuildMemberRoleManager;
     await memberRoles.add(role);
+    await memberRoles.add(role2);
 
     const groupName =
         minGroup.name.charAt(0).toUpperCase() + minGroup.name.slice(1);
     const embed = new EmbedBuilder()
-        .setTitle(
-            `Welcome, **${user?.firstName} ${user?.lastName}**!`
-        )
+        .setTitle(`Welcome, **${user?.firstName} ${user?.lastName}**!`)
         .setImage(minGroup.image)
         .setDescription(`You're a part of the ${groupName} Crew!`)
         .setFooter({
