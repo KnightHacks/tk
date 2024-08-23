@@ -60,6 +60,18 @@ function isSameDay(date1: Date, date2: Date): boolean {
     );
 }
 
+// remove html tags from a piece of text 
+// as the returned description from gcal api returns with tags
+function removeHTMLTags(str: string) {
+    if (str && typeof(str) === "string") {
+        return str.replace(/(<([^>]+)>)/ig, "");
+    } else {
+        throw new TypeError(
+            "The value passed to removeHTMLTags is not a string!"
+        );
+    }
+}
+
 // Date Interface
 interface DateProps {
     start: string;
@@ -75,15 +87,17 @@ function getDateProps(date1: Date | string, date2: Date | string) {
         date: undefined,
     };
 
+    // add one to month due to a bug that showed the previous month
+    // if the root cause of this issue is found, you can take steps to fix it
     const newDate = new Date(date1);
     newDate.setHours(newDate.getHours() - 4);
-    const month = newDate.getMonth().toString();
-    const day = (newDate.getDate() + 1).toString();
+    const month = (newDate.getMonth() + 1).toString();
+    const day = (newDate.getDate()).toString();
     const year = newDate.getFullYear().toString();
 
     const newDate2 = new Date(date2);
     newDate2.setHours(newDate2.getHours() - 4);
-    const month2 = newDate2.getMonth().toString();
+    const month2 = (newDate2.getMonth() + 1).toString();
     const day2 = newDate2.getDate().toString();
     const year2 = newDate2.getFullYear().toString();
 
@@ -210,7 +224,9 @@ export async function execute() {
                         name: `${prefix}!`,
                         iconURL: "https://i.imgur.com/0BR5rSn.png",
                     })
-                    .setDescription(he.decode(event.description ?? "TBA"))
+                    .setDescription(he.decode(
+                        removeHTMLTags(event.description ?? "TBA") ?? "TBA"
+                    ))
                     .addFields(fields)
 
                     .setFooter({
