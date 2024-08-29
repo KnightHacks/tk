@@ -130,17 +130,20 @@ function getDateProps(date1: Date | string, date2: Date | string) {
 async function getValidEvents() {
     const data = await fetchEvents(url);
 
-    const today = new Date();
-    const tomorrow = new Date();
-    const nextWeek = new Date();
+    const today = new Date(new Date().toLocaleDateString());
+    const tomorrow = new Date(new Date().toLocaleDateString());
+    const nextWeek = new Date(new Date().toLocaleDateString());
     tomorrow.setDate(today.getDate() + 1);
     nextWeek.setDate(today.getDate() + 7);
     const validEvents: Messages[] = [];
 
-    data.items.map((obj) => {
-        const eventDate = new Date(
+    data.items.forEach((obj: GoogleCalendarDataProps) => {
+        const eventDate = new Date(new Date(
             obj.start.dateTime ?? obj.start.date ?? "TBA"
-        );
+        ).toLocaleDateString());
+        
+        if (!eventDate) return;
+
         if (isSameDay(today, eventDate)) {
             validEvents.push({
                 ...obj,
@@ -170,7 +173,7 @@ export async function execute() {
 
     try {
         // Check events on a schedule
-        cron.schedule("0 16 * * *", async () => {
+        cron.schedule("*/5 * * * * *", async () => {
             const events = await getValidEvents();
 
             if (events.length === 0) {
