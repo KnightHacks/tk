@@ -143,6 +143,9 @@ export const GOATS = [
 
 export const LINKS = [
     "• [**Sign up for KnightHacks VII!**](https://2024.knighthacks.org/)",
+    "• [**Pay your dues!**](https://square.link/u/ET1I7OVK)",
+    "• [**Fill out our Membership Form!**](https://forms.gle/kLRWuHFWxkHFUs8s9)",
+    "• [**Become a Kickstart Mentee!**](https://forms.gle/HYGt74TwpyDJAmYZ9)",
     "• [**Check out our events calendar!**](https://calendar.google.com/calendar/u/0/r?cid=Y18wYjlkZjJiMDA2MmE1ZDcxMWZjMTYwNjBmZjMyODZlZjQwNGIxNzRiZmFmYzRjYmRkNGUzMDA5ZTkxNTM2ZTk0QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20)",
     "• [**Follow us on LinkedIn!**](https://www.linkedin.com/company/knight-hacks/posts/?feedView=all)",
     "• [**Follow us on Instagram!**](https://www.instagram.com/knighthacks)",
