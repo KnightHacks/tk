@@ -3,6 +3,7 @@ import fetch from "node-fetch";
 import cron from "node-cron";
 import { config } from "../config";
 import he from "he";
+import RRule from "rrule";
 
 // Google Calendar Props Interface
 interface GoogleCalendarProps {
@@ -18,6 +19,8 @@ interface GoogleCalendarDataProps {
     location: string;
     start: TimeProps;
     end: TimeProps;
+    recurrence: string[];
+    status: string;
 }
 
 // Add field for mapping
@@ -133,32 +136,63 @@ async function getValidEvents() {
     const today = new Date(new Date().toLocaleDateString());
     const tomorrow = new Date(new Date().toLocaleDateString());
     const nextWeek = new Date(new Date().toLocaleDateString());
+
     tomorrow.setDate(today.getDate() + 1);
     nextWeek.setDate(today.getDate() + 7);
+    
     const validEvents: Messages[] = [];
+    const allEvents = data.items.filter((event) => event.status !== "cancelled");
 
-    data.items.forEach((obj: GoogleCalendarDataProps) => {
+    allEvents.map((obj: GoogleCalendarDataProps) => {
         const eventDate = new Date(new Date(
             obj.start.dateTime ?? obj.start.date ?? "TBA"
         ).toLocaleDateString());
-        
-        if (!eventDate) return;
 
-        if (isSameDay(today, eventDate)) {
-            validEvents.push({
-                ...obj,
-                range: "Today",
+        if (obj.recurrence) {
+            const rule = RRule.rrulestr(obj.recurrence[0]);
+            const occurrences = rule.all();
+
+            occurrences.forEach((occurrence: Date) => {
+                occurrence = new Date(occurrence.toLocaleDateString());
+                if (isSameDay(today, occurrence) && isSameDay(eventDate, occurrence)) {
+                    validEvents.push({
+                        ...obj,
+                        range: "Today",
+                    });
+                } else if (isSameDay(tomorrow, occurrence) && isSameDay(eventDate, occurrence)) {
+                    validEvents.push({
+                        ...obj,
+                        range: "Tomorrow",
+                    });
+                } else if (
+                        isSameDay(nextWeek, occurrence) &&
+                        !obj.summary.includes("Operations Meetings") &&
+                        !obj.summary.includes("Kickstart Meeting") &&
+                        isSameDay(eventDate, occurrence)
+                    ) {
+                        validEvents.push({
+                            ...obj,
+                            range: "Next Week",
+                        });
+                }
             });
-        } else if (isSameDay(tomorrow, eventDate)) {
-            validEvents.push({
-                ...obj,
-                range: "Tomorrow",
-            });
-        } else if (isSameDay(nextWeek, eventDate)) {
-            validEvents.push({
-                ...obj,
-                range: "Next Week",
-            });
+        } else {
+            if (isSameDay(today, eventDate)) {
+                validEvents.push({
+                    ...obj,
+                    range: "Today",
+                });
+            } else if (isSameDay(tomorrow, eventDate)) {
+                validEvents.push({
+                    ...obj,
+                    range: "Tomorrow",
+                });
+            } else if (isSameDay(nextWeek, eventDate)) {
+                validEvents.push({
+                    ...obj,
+                    range: "Next Week",
+                });
+            }
         }
     });
 
