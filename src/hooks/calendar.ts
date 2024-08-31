@@ -133,49 +133,85 @@ function getDateProps(date1: Date | string, date2: Date | string) {
 async function getValidEvents() {
     const data = await fetchEvents(url);
 
+    // sets all consts to a new date with the local timezone.
     const today = new Date(new Date().toLocaleDateString());
     const tomorrow = new Date(new Date().toLocaleDateString());
     const nextWeek = new Date(new Date().toLocaleDateString());
 
+    // offsets tomorrow and nextweek appropriately (you can do this to add days to a date)
     tomorrow.setDate(today.getDate() + 1);
     nextWeek.setDate(today.getDate() + 7);
     
     const validEvents: Messages[] = [];
+    // filters out "cancelled" events from the initial data
     const allEvents = data.items.filter((event) => event.status !== "cancelled");
 
+    // maps through the filtered events
     allEvents.map((obj: GoogleCalendarDataProps) => {
+        // gets the event date based on two fields from the API
+        // also sets this to local time zone
         const eventDate = new Date(new Date(
             obj.start.dateTime ?? obj.start.date ?? "TBA"
         ).toLocaleDateString());
 
+        // checks if this is a recurring event
         if (obj.recurrence) {
+            // parses through the RRULE string provided by the API
+            // this rule defines recurring events 
             const rule = RRule.rrulestr(obj.recurrence[0]);
+            // gets all the occurences based on the RRULE
             const occurrences = rule.all();
 
+            // goes through each occurrence
             occurrences.forEach((occurrence: Date) => {
+                // gets the local timezone value for the occurrence
                 occurrence = new Date(occurrence.toLocaleDateString());
-                if (isSameDay(today, occurrence) && isSameDay(eventDate, occurrence)) {
-                    validEvents.push({
-                        ...obj,
-                        range: "Today",
-                    });
-                } else if (isSameDay(tomorrow, occurrence) && isSameDay(eventDate, occurrence)) {
-                    validEvents.push({
-                        ...obj,
-                        range: "Tomorrow",
-                    });
-                } else if (
-                        isSameDay(nextWeek, occurrence) &&
-                        !obj.summary.includes("Operations Meetings") &&
-                        !obj.summary.includes("Kickstart Meeting") &&
-                        isSameDay(eventDate, occurrence)
-                    ) {
-                        validEvents.push({
-                            ...obj,
-                            range: "Next Week",
-                        });
-                }
+                // if the object is already in the validEvents array, skip over this one
+                if (
+                    !validEvents.includes({ ...obj, range: "Today" }) &&
+                    !validEvents.includes({ ...obj, range: "Tomorrow" }) &&
+                    !validEvents.includes({ ...obj, range: "Next Week" })) {
+                            // checks if today's date is the same as the occurrence,
+                            // and if the eventDate is the same day as the occurrence OR
+                            // its a known recurring event
+                            if (
+                                isSameDay(today, occurrence) && 
+                                (isSameDay(eventDate, occurrence) || 
+                                    (
+                                        obj.summary.includes("Operations Meetings") ||
+                                        obj.summary.includes("Kickstart Meeting")
+                                    )
+                                )) {
+                            validEvents.push({
+                                ...obj,
+                                range: "Today",
+                            });
+                            // same as above except for tomorrow
+                        } else if (
+                                isSameDay(tomorrow, occurrence) && 
+                                isSameDay(eventDate, occurrence)
+                            ) {
+                            validEvents.push({
+                                ...obj,
+                                range: "Tomorrow",
+                            });
+                            // checks if next weeks date is the same as the occurrence,
+                            // if the eventDate is the same as the occurrence, 
+                            // and if a known recurring event is the one we're checking
+                        } else if (
+                                isSameDay(nextWeek, occurrence) &&
+                                !obj.summary.includes("Operations Meetings") &&
+                                !obj.summary.includes("Kickstart Meeting") &&
+                                isSameDay(eventDate, occurrence)
+                            ) {
+                                validEvents.push({
+                                    ...obj,
+                                    range: "Next Week",
+                                });
+                            }
+                    } 
             });
+            // if not a recurring event
         } else {
             if (isSameDay(today, eventDate)) {
                 validEvents.push({
@@ -207,14 +243,15 @@ export async function execute() {
 
     try {
         // Check events on a schedule
-        cron.schedule("0 16 * * *", async () => {
+        cron.schedule("*/5 * * * * *", async () => {
             const events = await getValidEvents();
 
             if (events.length === 0) {
                 return;
             } else if (events.length >= 1) {
                 webhook.send(
-                    `Hey everyone, here are some reminders about our upcoming events! <@&${config.CALENDAR_ROLE_ID}>\n`
+                    // `Hey everyone, here are some reminders about our upcoming events! <@&${config.CALENDAR_ROLE_ID}>\n`
+                    `Hey everyone, here are some reminders about our upcoming events!`
                 );
             }
 
