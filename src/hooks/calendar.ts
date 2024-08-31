@@ -250,8 +250,7 @@ export async function execute() {
                 return;
             } else if (events.length >= 1) {
                 webhook.send(
-                    // `Hey everyone, here are some reminders about our upcoming events! <@&${config.CALENDAR_ROLE_ID}>\n`
-                    `Hey everyone, here are some reminders about our upcoming events!`
+                    `Hey everyone, here are some reminders about our upcoming events! <@&${config.CALENDAR_ROLE_ID}>\n`
                 );
             }
 
