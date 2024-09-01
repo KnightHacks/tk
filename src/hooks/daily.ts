@@ -64,7 +64,7 @@ export async function execute() {
 
     try {
         // Create a cron job that will run at 11:00 AM every day
-        cron.schedule("0 15 * * *", async () => {
+        cron.schedule("0 11 * * *", async () => {
             // Fetch the problem data and format the data
             const problem = (await fetchData(url)) as DailyProblemProps;
             const date = problem.date.split("-");
@@ -138,8 +138,8 @@ export async function execute() {
         });
     } catch (err: unknown) {
         // silences eslint. type safety with our errors basically
-        err instanceof Error ? 
-            console.error(err.message) : 
-            console.error("An unknown error occurred: ", err);
+        err instanceof Error
+            ? console.error(err.message)
+            : console.error("An unknown error occurred: ", err);
     }
 }

@@ -122,18 +122,15 @@ function getDateProps(
     // add one to month due to a bug that showed the previous month
     // if the root cause of this issue is found, you can take steps to fix it
     const newDate = new Date(date1);
-    newDate.setHours(newDate.getHours() - 4);
+    newDate.setHours(newDate.getHours());
     const month = (newDate.getMonth() + 1).toString();
     const day = newDate.getDate().toString();
     const year = newDate.getFullYear().toString();
 
     newDate.setDate(newDate.getDate() - 1);
-    if (event === "Operations Meeting" || event === "Kickstart Meeting") {
-        newDate.setDate(newDate.getDate() - 7);
-    }
 
     const newDate2 = new Date(date2);
-    newDate2.setHours(newDate2.getHours() - 4);
+    newDate2.setHours(newDate2.getHours());
     const month2 = (newDate2.getMonth() + 1).toString();
     const day2 = newDate2.getDate().toString();
     const year2 = newDate2.getFullYear().toString();
@@ -210,16 +207,6 @@ async function getValidEvents() {
                         acc.push(event);
                     }
                 } else {
-                    if (
-                        event.summary === "Operations Meeting" ||
-                        event.summary === "Kickstart Meeting"
-                    ) {
-                        const newDate = new Date(
-                            event.start.dateTime ?? event.start.date ?? ""
-                        );
-                        newDate.setDate(newDate.getDate() + 7);
-                        event.start.dateTime = newDate;
-                    }
                     acc.push(event);
                 }
                 return acc;
@@ -272,7 +259,7 @@ export async function execute() {
 
     try {
         // Check events on a schedule
-        cron.schedule("0 16 * * *", async () => {
+        cron.schedule("0 12 * * *", async () => {
             console.log("Checking for events...");
             const events = await getValidEvents();
 
@@ -283,6 +270,17 @@ export async function execute() {
                     `Hey everyone, here are some reminders about our upcoming events! <@&${config.CALENDAR_ROLE_ID}>\n`
                 );
             }
+
+            // Sort events by range, today -> tomorrow -> next week
+            events.sort((a, b) => {
+                if (a.range === "Today") {
+                    return -1;
+                } else if (a.range === "Tomorrow") {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            });
 
             events.map((event) => {
                 const prefix = event.range;

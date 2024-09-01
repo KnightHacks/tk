@@ -67,7 +67,7 @@ function catHook(webhook: WebhookClient) {
     const url = "https://api.thecatapi.com/v1/images/search?limit=1";
     
     try {
-        cron.schedule("0 17 * * *", async () => {
+        cron.schedule("0 13 * * *", async () => {
             const res = await fetch(url);
             const data = (await res.json()) as CatProps[];
 
@@ -91,7 +91,7 @@ function capybaraHook(webhook: WebhookClient) {
     const url = "https://api.capy.lol/v1/capybara?json=true";
 
     try {
-        cron.schedule("30 17 * * *", async () => {
+        cron.schedule("30 13 * * *", async () => {
             const res = await fetch(url);
             const data = (await res.json()) as CapybaraProps;
 
@@ -114,7 +114,7 @@ function duckHook(webhook: WebhookClient) {
     const url = "https://random-d.uk/api/v2/quack";
 
     try {
-        cron.schedule("0 18 * * *", async () => {
+        cron.schedule("0 14 * * *", async () => {
             const res = await fetch(url);
             const data = (await res.json()) as DuckProps;
 
@@ -135,7 +135,7 @@ function duckHook(webhook: WebhookClient) {
 
 async function goatHook(webhook: WebhookClient) {
     try {
-        cron.schedule("30 18 * * *", async () => {
+        cron.schedule("30 14 * * *", async () => {
             const goat = GOATS[Math.floor(Math.random() * GOATS.length)];
             const img = JIMP.read(goat.image);
             const width = (await img).getWidth(),
