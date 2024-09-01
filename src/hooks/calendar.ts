@@ -34,8 +34,20 @@ interface TimeProps {
     dateTime?: Date;
 }
 
+// Set as a date to test the same day function
+// a string in the form "YYYY-MM-DD" can be passed to test a specific date
+const TEST_DATE = undefined;
+
 // Google maps API URL
-const url = `https://www.googleapis.com/calendar/v3/calendars/${config.GOOGLE_CALENDAR_ID}/events?key=${config.GOOGLE_API_KEY}`;
+const today = new Date(TEST_DATE ?? new Date().toLocaleDateString());
+const nextWeek = new Date(today);
+nextWeek.setDate(today.getDate() + 7);
+const url = `https://www.googleapis.com/calendar/v3/calendars/${
+    config.GOOGLE_CALENDAR_ID
+}/events?key=${
+    config.GOOGLE_API_KEY
+}&timeMax=${nextWeek.toISOString()}&timeMin=${today.toISOString()}`;
+console.log(url);
 
 // Function to fetch all of the events
 const fetchEvents = async (url: string) => {
@@ -55,19 +67,32 @@ const fetchEvents = async (url: string) => {
 };
 
 // Check if two dates are the same day
-function isSameDay(date1: Date, date2: Date): boolean {
-    return (
-        date1.getFullYear() === date2.getFullYear() &&
-        date1.getMonth() === date2.getMonth() &&
-        date1.getDate() === date2.getDate()
+function isSameDay(date1: Date, date2: Date, event?: string): boolean {
+    // Normalize dates to midnight UTC
+    const normalizeDate = (date: Date) =>
+        new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+
+    const d1 = normalizeDate(date1);
+    d1.setDate(d1.getDate() + 1);
+    const d2 = normalizeDate(date2);
+
+    const result = d1.getTime() === d2.getTime();
+
+    console.log(
+        `Date1: ${d1.toISOString()}`,
+        `Date2: ${d2.toISOString()}`,
+        `Event: ${event}`,
+        `Are the same day? ${result}`
     );
+
+    return result;
 }
 
-// remove html tags from a piece of text 
+// remove html tags from a piece of text
 // as the returned description from gcal api returns with tags
 function removeHTMLTags(str: string) {
-    if (str && typeof(str) === "string") {
-        return str.replace(/(<([^>]+)>)/ig, "");
+    if (str && typeof str === "string") {
+        return str.replace(/(<([^>]+)>)/gi, "");
     } else {
         throw new TypeError(
             "The value passed to removeHTMLTags is not a string!"
@@ -83,7 +108,11 @@ interface DateProps {
 }
 
 // Grab the start and end date or time, depending if the event is multi or single day in duration
-function getDateProps(date1: Date | string, date2: Date | string) {
+function getDateProps(
+    date1: Date | string,
+    date2: Date | string,
+    event?: string
+) {
     const dateObject: DateProps = {
         start: "",
         end: "",
@@ -95,8 +124,13 @@ function getDateProps(date1: Date | string, date2: Date | string) {
     const newDate = new Date(date1);
     newDate.setHours(newDate.getHours() - 4);
     const month = (newDate.getMonth() + 1).toString();
-    const day = (newDate.getDate()).toString();
+    const day = newDate.getDate().toString();
     const year = newDate.getFullYear().toString();
+
+    newDate.setDate(newDate.getDate() - 1);
+    if (event === "Operations Meeting" || event === "Kickstart Meeting") {
+        newDate.setDate(newDate.getDate() - 7);
+    }
 
     const newDate2 = new Date(date2);
     newDate2.setHours(newDate2.getHours() - 4);
@@ -104,8 +138,13 @@ function getDateProps(date1: Date | string, date2: Date | string) {
     const day2 = newDate2.getDate().toString();
     const year2 = newDate2.getFullYear().toString();
 
+    console.log(event, newDate, newDate2);
+
     // Set start and end to times, and include the date
-    if (isSameDay(newDate, newDate2)) {
+    if (
+        isSameDay(newDate, newDate2, `${event} SAME DAY CHECK FOR DATE FORMAT`)
+    ) {
+        console.log("Same day event");
         const hours1 = newDate.getHours();
         const minutes1 = newDate.getMinutes().toString().padStart(2, "0");
         const hours2 = newDate2.getHours();
@@ -134,101 +173,91 @@ async function getValidEvents() {
     const data = await fetchEvents(url);
 
     // sets all consts to a new date with the local timezone.
-    const today = new Date(new Date().toLocaleDateString());
-    const tomorrow = new Date(new Date().toLocaleDateString());
-    const nextWeek = new Date(new Date().toLocaleDateString());
+    const today = new Date(TEST_DATE ?? new Date().toLocaleDateString());
+    const tomorrow = new Date(today);
+    const nextWeek = new Date(today);
 
     // offsets tomorrow and nextweek appropriately (you can do this to add days to a date)
     tomorrow.setDate(today.getDate() + 1);
     nextWeek.setDate(today.getDate() + 7);
-    
+
     const validEvents: Messages[] = [];
-    // filters out "cancelled" events from the initial data
-    const allEvents = data.items.filter((event) => event.status !== "cancelled");
+    // filters out "cancelled" events from the initial data and objects that are recurring, and obj.recurrence is not null
+    const allEvents = data.items
+        .filter((event) => event.status !== "cancelled")
+        .filter((event) => event.recurrence !== null)
+        // remove elements with the same summary, keeping the greatest date
+        // this is to prevent duplicate events from being displayed
+        .reduce(
+            (
+                acc: GoogleCalendarDataProps[],
+                event: GoogleCalendarDataProps
+            ) => {
+                const existingEvent = acc.find(
+                    (e) => e.summary === event.summary
+                );
+                if (existingEvent) {
+                    const existingDate = new Date(
+                        existingEvent.start.dateTime ??
+                            existingEvent.start.date ??
+                            ""
+                    );
+                    const currentDate = new Date(
+                        event.start.dateTime ?? event.start.date ?? ""
+                    );
+                    if (currentDate > existingDate) {
+                        acc = acc.filter((e) => e.summary !== event.summary);
+                        acc.push(event);
+                    }
+                } else {
+                    if (
+                        event.summary === "Operations Meeting" ||
+                        event.summary === "Kickstart Meeting"
+                    ) {
+                        const newDate = new Date(
+                            event.start.dateTime ?? event.start.date ?? ""
+                        );
+                        newDate.setDate(newDate.getDate() + 7);
+                        event.start.dateTime = newDate;
+                    }
+                    acc.push(event);
+                }
+                return acc;
+            },
+            []
+        );
+
+    // Print all summaries and start dates
+    allEvents.map((obj: GoogleCalendarDataProps) => {
+        console.log(obj.summary, obj.start.dateTime);
+    });
 
     // maps through the filtered events
     allEvents.map((obj: GoogleCalendarDataProps) => {
         // gets the event date based on two fields from the API
         // also sets this to local time zone
-        const eventDate = new Date(new Date(
-            obj.start.dateTime ?? obj.start.date ?? "TBA"
-        ).toLocaleDateString());
+        const eventDate = new Date(
+            new Date(
+                obj.start.dateTime ?? obj.start.date ?? "TBA"
+            ).toLocaleDateString()
+        );
 
-        // checks if this is a recurring event
-        if (obj.recurrence) {
-            // parses through the RRULE string provided by the API
-            // this rule defines recurring events 
-            const rule = RRule.rrulestr(obj.recurrence[0]);
-            // gets all the occurences based on the RRULE
-            const occurrences = rule.all();
-
-            // goes through each occurrence
-            occurrences.forEach((occurrence: Date) => {
-                // gets the local timezone value for the occurrence
-                occurrence = new Date(occurrence.toLocaleDateString());
-                // if the object is already in the validEvents array, skip over this one
-                if (
-                    !validEvents.includes({ ...obj, range: "Today" }) &&
-                    !validEvents.includes({ ...obj, range: "Tomorrow" }) &&
-                    !validEvents.includes({ ...obj, range: "Next Week" })) {
-                            // checks if today's date is the same as the occurrence,
-                            // and if the eventDate is the same day as the occurrence OR
-                            // its a known recurring event
-                            if (
-                                isSameDay(today, occurrence) && 
-                                (isSameDay(eventDate, occurrence) || 
-                                    (
-                                        obj.summary.includes("Operations Meetings") ||
-                                        obj.summary.includes("Kickstart Meeting")
-                                    )
-                                )) {
-                            validEvents.push({
-                                ...obj,
-                                range: "Today",
-                            });
-                            // same as above except for tomorrow
-                        } else if (
-                                isSameDay(tomorrow, occurrence) && 
-                                isSameDay(eventDate, occurrence)
-                            ) {
-                            validEvents.push({
-                                ...obj,
-                                range: "Tomorrow",
-                            });
-                            // checks if next weeks date is the same as the occurrence,
-                            // if the eventDate is the same as the occurrence, 
-                            // and if a known recurring event is the one we're checking
-                        } else if (
-                                isSameDay(nextWeek, occurrence) &&
-                                !obj.summary.includes("Operations Meetings") &&
-                                !obj.summary.includes("Kickstart Meeting") &&
-                                isSameDay(eventDate, occurrence)
-                            ) {
-                                validEvents.push({
-                                    ...obj,
-                                    range: "Next Week",
-                                });
-                            }
-                    } 
+        console.log(today, tomorrow, nextWeek);
+        if (isSameDay(today, eventDate, `${obj.summary} TODAY`)) {
+            validEvents.push({
+                ...obj,
+                range: "Today",
             });
-            // if not a recurring event
-        } else {
-            if (isSameDay(today, eventDate)) {
-                validEvents.push({
-                    ...obj,
-                    range: "Today",
-                });
-            } else if (isSameDay(tomorrow, eventDate)) {
-                validEvents.push({
-                    ...obj,
-                    range: "Tomorrow",
-                });
-            } else if (isSameDay(nextWeek, eventDate)) {
-                validEvents.push({
-                    ...obj,
-                    range: "Next Week",
-                });
-            }
+        } else if (isSameDay(tomorrow, eventDate, `${obj.summary} TOMORROW`)) {
+            validEvents.push({
+                ...obj,
+                range: "Tomorrow",
+            });
+        } else if (isSameDay(nextWeek, eventDate, `${obj.summary} NEXT WEEK`)) {
+            validEvents.push({
+                ...obj,
+                range: "Next Week",
+            });
         }
     });
 
@@ -243,7 +272,8 @@ export async function execute() {
 
     try {
         // Check events on a schedule
-        cron.schedule("0 16 * * *", async () => {
+        cron.schedule("*/5 * * * * *", async () => {
+            console.log("Checking for events...");
             const events = await getValidEvents();
 
             if (events.length === 0) {
@@ -258,7 +288,8 @@ export async function execute() {
                 const prefix = event.range;
                 const date = getDateProps(
                     event.start.dateTime ?? event.start.date ?? "6/9/1969",
-                    event.end.dateTime ?? event.end.date ?? "6/9/1969"
+                    event.end.dateTime ?? event.end.date ?? "6/9/1969",
+                    event.summary
                 );
 
                 // Conditionally render the fields based off the date
@@ -297,9 +328,11 @@ export async function execute() {
                         name: `${prefix}!`,
                         iconURL: "https://i.imgur.com/0BR5rSn.png",
                     })
-                    .setDescription(he.decode(
-                        removeHTMLTags(event.description ?? "TBA") ?? "TBA"
-                    ))
+                    .setDescription(
+                        he.decode(
+                            removeHTMLTags(event.description ?? "TBA") ?? "TBA"
+                        )
+                    )
                     .addFields(fields)
 
                     .setFooter({
