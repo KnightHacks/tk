@@ -272,7 +272,7 @@ export async function execute() {
 
     try {
         // Check events on a schedule
-        cron.schedule("*/5 * * * * *", async () => {
+        cron.schedule("0 16 * * *", async () => {
             console.log("Checking for events...");
             const events = await getValidEvents();
 
