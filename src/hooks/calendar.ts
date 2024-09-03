@@ -3,7 +3,6 @@ import fetch from "node-fetch";
 import cron from "node-cron";
 import { config } from "../config";
 import he from "he";
-import RRule from "rrule";
 
 // Google Calendar Props Interface
 interface GoogleCalendarProps {
@@ -73,7 +72,6 @@ function isSameDay(date1: Date, date2: Date, event?: string): boolean {
         new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
 
     const d1 = normalizeDate(date1);
-    d1.setDate(d1.getDate() + 1);
     const d2 = normalizeDate(date2);
 
     const result = d1.getTime() === d2.getTime();
@@ -272,7 +270,7 @@ export async function execute() {
             }
 
             // Sort events by range, today -> tomorrow -> next week
-            events.sort((a, b) => {
+            events.sort((a) => {
                 if (a.range === "Today") {
                     return -1;
                 } else if (a.range === "Tomorrow") {
