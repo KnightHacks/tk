@@ -261,11 +261,17 @@ export async function execute() {
             console.log("Checking for events...");
             const events = await getValidEvents();
 
+            const todayDate = new Date();
+            const todayDay = todayDate.getDate();
+            const todayMonth = todayDate.getMonth() + 1;
+            const todayYear = todayDate.getFullYear();
+            const todayDateString = todayMonth + "/" + todayDay + "/" + todayYear;
+
             if (events.length === 0) {
                 return;
             } else if (events.length >= 1) {
                 webhook.send(
-                    `Hey everyone, here are some reminders about our upcoming events! <@&${config.CALENDAR_ROLE_ID}>\n`
+                    `Hey everyone, it's ${todayDateString}, here are some reminders about our upcoming events! <@&${config.CALENDAR_ROLE_ID}>\n`
                 );
             }
 
