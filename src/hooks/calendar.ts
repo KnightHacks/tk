@@ -8,7 +8,6 @@ import fetch from "node-fetch";
 import cron from "node-cron";
 import { config } from "../config";
 import he from "he";
-import { client } from "..";
 
 // Google Calendar Props Interface
 interface GoogleCalendarProps {
@@ -414,7 +413,7 @@ export async function execute(client: Client) {
 
     try {
         // Check events on a schedule
-        cron.schedule("0 8 * * *", async () => hookLogic(client, preWebhook));
+        cron.schedule("30 9 * * *", async () => hookLogic(client, preWebhook));
         cron.schedule("0 12 * * *", async () => hookLogic(client, webhook));
         // Catch any errors
     } catch (err: unknown) {
