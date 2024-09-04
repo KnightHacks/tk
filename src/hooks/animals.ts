@@ -7,6 +7,7 @@ import cron from "node-cron";
 import { config } from "../config";
 import JIMP from "jimp";
 import { GOATS } from "../consts";
+import { Client } from "discord.js";
 
 // various hook props
 interface CatProps {
@@ -27,7 +28,7 @@ interface DuckProps {
     url: string;
 }
 
-export async function execute() {
+export async function execute(client: Client) {
     const webhook = new WebhookClient({
         url: config.ANIMAL_WEBHOOK_URL,
     });

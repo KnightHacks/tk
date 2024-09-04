@@ -49,5 +49,5 @@ client.login(config.DISCORD_TOKEN);
 
 // Call all of the hooks (each hook will need a webhook client created in the hook)
 for (const hook of Object.values(hooks)) {
-    hook();
+    hook(client);
 }

@@ -3,6 +3,7 @@ import {
     EmbedBuilder,
     ChannelType,
     ThreadAutoArchiveDuration,
+    Client,
 } from "discord.js";
 import { client } from "../index";
 import fetch from "node-fetch";
@@ -56,7 +57,7 @@ const randInt = (max: number) => {
 };
 
 // Leetcode Daily Problem Webhook
-export async function execute() {
+export async function execute(client: Client) {
     // Create a new Webhook client instance using the DAILY webhook URL
     const webhook = new WebhookClient({
         url: config.DAILY_WEBHOOK_URL,

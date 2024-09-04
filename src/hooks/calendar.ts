@@ -1,8 +1,14 @@
-import { WebhookClient, EmbedBuilder } from "discord.js";
+import {
+    WebhookClient,
+    EmbedBuilder,
+    Client,
+    GuildScheduledEventManager,
+} from "discord.js";
 import fetch from "node-fetch";
 import cron from "node-cron";
 import { config } from "../config";
 import he from "he";
+import { client } from "..";
 
 // Google Calendar Props Interface
 interface GoogleCalendarProps {
@@ -14,7 +20,7 @@ interface GoogleCalendarProps {
 interface GoogleCalendarDataProps {
     htmlLink: string;
     summary: string;
-    description: string | null;
+    description: string;
     location: string;
     start: TimeProps;
     end: TimeProps;
@@ -40,7 +46,7 @@ const TEST_DATE = undefined;
 // Google maps API URL
 const today = new Date(TEST_DATE ?? new Date().toLocaleDateString());
 const nextWeek = new Date(today);
-nextWeek.setDate(today.getDate() + 7);
+nextWeek.setDate(today.getDate() + 8);
 const url = `https://www.googleapis.com/calendar/v3/calendars/${
     config.GOOGLE_CALENDAR_ID
 }/events?key=${
@@ -163,6 +169,54 @@ function getDateProps(
     return dateObject;
 }
 
+// Function to create discord event
+async function createDiscordEvents(events: Messages[], client: Client) {
+    // Filter out all events that are not next week
+    const nextWeekEvents = events.filter(
+        (event) => event.range === "Next Week"
+    );
+
+    // Iterate through the next week events
+    nextWeekEvents.map(async (event) => {
+        // Create a guild event for each event using the discord client
+        for (const guild of client.guilds.cache.values()) {
+            try {
+                if (guild.id != "486628710443778071") {
+                    continue;
+                }
+                // Check if the event already exists
+                const exestingEvents = await guild.scheduledEvents.fetch();
+
+                // If the event already exists, skip
+                if (exestingEvents.some((e) => e.name === event.summary)) {
+                    console.log(
+                        `Event "${event.summary}" already exists in guild "${guild.name}". Skipping creation.`
+                    );
+                    continue;
+                }
+
+                await guild.scheduledEvents.create({
+                    name: event.summary,
+                    scheduledStartTime: new Date(
+                        event.start.dateTime ?? event.start.date ?? "6/9/1969"
+                    ),
+                    scheduledEndTime: new Date(
+                        event.end.dateTime ?? event.end.date ?? "6/9/1969"
+                    ),
+                    privacyLevel: 2, // 2 corresponds to 'GUILD_ONLY' (visible only to guild members)
+                    entityType: 3, // 3 corresponds to 'EXTERNAL' (for external events)
+                    entityMetadata: {
+                        location: event.location,
+                    },
+                    description: event.description,
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+    });
+}
+
 // Grab all events that are today, tomorrow, or in a week
 async function getValidEvents() {
     const data = await fetchEvents(url);
@@ -249,104 +303,119 @@ async function getValidEvents() {
     return validEvents;
 }
 
-export async function execute() {
+async function hookLogic(client: Client, webhook: WebhookClient) {
+    console.log("Checking for events...");
+    const events = await getValidEvents();
+
+    const todayDate = new Date();
+    const todayDay = todayDate.getDate();
+    const todayMonth = todayDate.getMonth() + 1;
+    const todayYear = todayDate.getFullYear();
+    const todayDateString = todayMonth + "/" + todayDay + "/" + todayYear;
+
+    if (events.length === 0) {
+        return;
+    } else if (events.length >= 1) {
+        webhook.send(
+            `Hey @everyone, it's ${todayDateString}, here are some reminders about our upcoming events!\n`
+        );
+
+        // Create event on Discord for the upcoming event
+        createDiscordEvents(events, client);
+    }
+
+    // Sort events by today, then tomorrow, then next week
+    events.sort((a, b) => {
+        if (a.range === "Today") {
+            return -1;
+        } else if (b.range === "Today") {
+            return 1;
+        } else if (a.range === "Tomorrow") {
+            return -1;
+        } else if (b.range === "Tomorrow") {
+            return 1;
+        } else if (a.range === "Next Week") {
+            return -1;
+        } else {
+            return 1;
+        }
+    });
+
+    events.map((event) => {
+        const prefix = event.range;
+        const date = getDateProps(
+            event.start.dateTime ?? event.start.date ?? "6/9/1969",
+            event.end.dateTime ?? event.end.date ?? "6/9/1969",
+            event.summary
+        );
+
+        // Conditionally render the fields based off the date
+        const fields = [
+            {
+                name: "Location",
+                value: event.location ?? "TBA",
+                inline: date ? true : false,
+            },
+            {
+                name: "Start",
+                value: `${date.start}`,
+                inline: true,
+            },
+            {
+                name: "End",
+                value: `${date.end}`,
+                inline: true,
+            },
+        ];
+
+        if (date.date) {
+            fields.splice(1, 0, {
+                name: "Date",
+                value: `${date.date}`,
+                inline: false,
+            });
+        }
+
+        // Create the embed
+        const eventEmbed = new EmbedBuilder()
+            .setColor(0x33e0ff)
+            .setTitle(event.summary)
+            .setURL(event.htmlLink)
+            .setAuthor({
+                name: `${prefix}!`,
+                iconURL: "https://i.imgur.com/0BR5rSn.png",
+            })
+            .setDescription(
+                he.decode(removeHTMLTags(event.description ?? "TBA") ?? "TBA")
+            )
+            .addFields(fields)
+
+            .setFooter({
+                text: "We hope to see you there! - the Knight Hacks Crew :)",
+            });
+
+        // Send the message
+        return webhook.send({
+            embeds: [eventEmbed],
+        });
+    });
+}
+
+export async function execute(client: Client) {
     // Create a new Webhook client instance
     const webhook = new WebhookClient({
         url: config.CALENDAR_WEBHOOK_URL,
     });
 
+    // Create a new Webhook client instance
+    const preWebhook = new WebhookClient({
+        url: config.PRE_CALENDAR_WEBHOOK_URL,
+    });
+
     try {
         // Check events on a schedule
-        cron.schedule("0 12 * * *", async () => {
-            console.log("Checking for events...");
-            const events = await getValidEvents();
-
-            const todayDate = new Date();
-            const todayDay = todayDate.getDate();
-            const todayMonth = todayDate.getMonth() + 1;
-            const todayYear = todayDate.getFullYear();
-            const todayDateString = todayMonth + "/" + todayDay + "/" + todayYear;
-
-            if (events.length === 0) {
-                return;
-            } else if (events.length >= 1) {
-                webhook.send(
-                    `Hey everyone, it's ${todayDateString}, here are some reminders about our upcoming events! <@&${config.CALENDAR_ROLE_ID}>\n`
-                );
-            }
-
-            // Sort events by range, today -> tomorrow -> next week
-            events.sort((a) => {
-                if (a.range === "Today") {
-                    return -1;
-                } else if (a.range === "Tomorrow") {
-                    return -1;
-                } else {
-                    return 1;
-                }
-            });
-
-            events.map((event) => {
-                const prefix = event.range;
-                const date = getDateProps(
-                    event.start.dateTime ?? event.start.date ?? "6/9/1969",
-                    event.end.dateTime ?? event.end.date ?? "6/9/1969",
-                    event.summary
-                );
-
-                // Conditionally render the fields based off the date
-                const fields = [
-                    {
-                        name: "Location",
-                        value: event.location ?? "TBA",
-                        inline: date ? true : false,
-                    },
-                    {
-                        name: "Start",
-                        value: `${date.start}`,
-                        inline: true,
-                    },
-                    {
-                        name: "End",
-                        value: `${date.end}`,
-                        inline: true,
-                    },
-                ];
-
-                if (date.date) {
-                    fields.splice(1, 0, {
-                        name: "Date",
-                        value: `${date.date}`,
-                        inline: false,
-                    });
-                }
-
-                // Create the embed
-                const eventEmbed = new EmbedBuilder()
-                    .setColor(0x33e0ff)
-                    .setTitle(event.summary)
-                    .setURL(event.htmlLink)
-                    .setAuthor({
-                        name: `${prefix}!`,
-                        iconURL: "https://i.imgur.com/0BR5rSn.png",
-                    })
-                    .setDescription(
-                        he.decode(
-                            removeHTMLTags(event.description ?? "TBA") ?? "TBA"
-                        )
-                    )
-                    .addFields(fields)
-
-                    .setFooter({
-                        text: "We hope to see you there! - the Knight Hacks Crew :)",
-                    });
-
-                // Send the message
-                return webhook.send({
-                    embeds: [eventEmbed],
-                });
-            });
-        });
+        cron.schedule("0 8 * * *", async () => hookLogic(client, preWebhook));
+        cron.schedule("0 12 * * *", async () => hookLogic(client, webhook));
         // Catch any errors
     } catch (err: unknown) {
         // silences eslint. type safety with our errors basically
