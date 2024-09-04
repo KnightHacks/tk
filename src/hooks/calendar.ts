@@ -406,7 +406,7 @@ export async function execute(client: Client) {
 
     try {
         // Check events on a schedule
-        cron.schedule("30 11 * * *", async () => hookLogic(client, preWebhook));
+        cron.schedule("0 8 * * *", async () => hookLogic(client, preWebhook));
         cron.schedule("0 12 * * *", async () => hookLogic(client, webhook));
         // Catch any errors
     } catch (err: unknown) {
