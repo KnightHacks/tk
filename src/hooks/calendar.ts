@@ -130,15 +130,13 @@ function getDateProps(
     const day = newDate.getDate().toString();
     const year = newDate.getFullYear().toString();
 
-    newDate.setDate(newDate.getDate() - 1);
-
     const newDate2 = new Date(date2);
     newDate2.setHours(newDate2.getHours());
     const month2 = (newDate2.getMonth() + 1).toString();
     const day2 = newDate2.getDate().toString();
     const year2 = newDate2.getFullYear().toString();
 
-    console.log(event, newDate, newDate2);
+    console.log("CHECKING DATE PROPS:", event, newDate, newDate2);
 
     // Set start and end to times, and include the date
     if (
@@ -170,13 +168,8 @@ function getDateProps(
 
 // Function to create discord event
 async function createDiscordEvents(events: Messages[], client: Client) {
-    // Filter out all events that are not next week
-    const nextWeekEvents = events.filter(
-        (event) => event.range === "Next Week"
-    );
-
     // Iterate through the next week events
-    nextWeekEvents.map(async (event) => {
+    events.map(async (event) => {
         // Create a guild event for each event using the discord client
         for (const guild of client.guilds.cache.values()) {
             try {
@@ -413,7 +406,7 @@ export async function execute(client: Client) {
 
     try {
         // Check events on a schedule
-        cron.schedule("30 9 * * *", async () => hookLogic(client, preWebhook));
+        cron.schedule("30 11 * * *", async () => hookLogic(client, preWebhook));
         cron.schedule("0 12 * * *", async () => hookLogic(client, webhook));
         // Catch any errors
     } catch (err: unknown) {
