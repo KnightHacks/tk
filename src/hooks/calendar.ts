@@ -45,6 +45,8 @@ const TEST_DATE = undefined;
 const today = new Date(TEST_DATE ?? new Date().toLocaleDateString());
 const nextWeek = new Date(today);
 nextWeek.setDate(today.getDate() + 8);
+console.log("Today: ", today, "\nNext Week: ", nextWeek);
+
 const url = `https://www.googleapis.com/calendar/v3/calendars/${
     config.GOOGLE_CALENDAR_ID
 }/events?key=${
@@ -102,6 +104,14 @@ function removeHTMLTags(str: string) {
     }
 }
 
+// date obj to string
+function dateToString(date: Date) {
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return month + "/" + day + "/" + year;
+}
+
 // Date Interface
 interface DateProps {
     start: string;
@@ -125,15 +135,11 @@ function getDateProps(
     // if the root cause of this issue is found, you can take steps to fix it
     const newDate = new Date(date1);
     newDate.setHours(newDate.getHours());
-    const month = (newDate.getMonth() + 1).toString();
-    const day = newDate.getDate().toString();
-    const year = newDate.getFullYear().toString();
+    const startDateString = dateToString(newDate);
 
     const newDate2 = new Date(date2);
     newDate2.setHours(newDate2.getHours());
-    const month2 = (newDate2.getMonth() + 1).toString();
-    const day2 = newDate2.getDate().toString();
-    const year2 = newDate2.getFullYear().toString();
+    const endDateString = dateToString(newDate2);
 
     console.log("CHECKING DATE PROPS:", event, newDate, newDate2);
 
@@ -155,20 +161,28 @@ function getDateProps(
 
         dateObject.start = formattedHours1 + ":" + minutes1 + " " + period1;
         dateObject.end = formattedHours2 + ":" + minutes2 + " " + period2;
-        dateObject.date = month + "/" + day + "/" + year;
+        dateObject.date = startDateString;
     } else {
         // Set start and end to dates
-        dateObject.start = month + "/" + day + "/" + year;
-        dateObject.end = month2 + "/" + day2 + "/" + year2;
+        dateObject.start = startDateString;
+        dateObject.end = endDateString;
     }
 
     return dateObject;
 }
 
 // Function to create discord event
-async function createDiscordEvents(events: Messages[], client: Client) {
+async function createDiscordEvents(
+    events: GoogleCalendarDataProps[], 
+    client: Client) {
+
+    // filter out operations meetings, as they mess with event creation
+    const filteredEvents = events
+                    .filter((event) => event.summary !== "Operations Meeting");
+
     // Iterate through the next week events
-    events.map(async (event) => {
+    filteredEvents.map(async (event) => {
+        console.log(event.summary);
         // Create a guild event for each event using the discord client
         for (const guild of client.guilds.cache.values()) {
             try {
@@ -209,9 +223,7 @@ async function createDiscordEvents(events: Messages[], client: Client) {
 }
 
 // Grab all events that are today, tomorrow, or in a week
-async function getValidEvents() {
-    const data = await fetchEvents(url);
-
+async function getValidEvents(data: GoogleCalendarDataProps[]) {
     // sets all consts to a new date with the local timezone.
     const today = new Date(TEST_DATE ?? new Date().toLocaleDateString());
     const tomorrow = new Date(today);
@@ -223,13 +235,9 @@ async function getValidEvents() {
 
     const validEvents: Messages[] = [];
     // filters out "cancelled" events from the initial data and objects that are recurring, and obj.recurrence is not null
-    const allEvents = data.items
-        .filter((event) => event.status !== "cancelled")
-        .filter((event) => event.recurrence !== null)
-        .filter((event) => event.summary !== "Kickstart Meeting")
-        // remove elements with the same summary, keeping the greatest date
-        // this is to prevent duplicate events from being displayed
-        .reduce(
+    // remove elements with the same summary, keeping the greatest date
+    // this is to prevent duplicate events from being displayed
+    const allEvents = data.reduce(
             (
                 acc: GoogleCalendarDataProps[],
                 event: GoogleCalendarDataProps
@@ -296,24 +304,27 @@ async function getValidEvents() {
 }
 
 async function hookLogic(client: Client, webhook: WebhookClient) {
-    console.log("Checking for events...");
-    const events = await getValidEvents();
+    const data = await fetchEvents(url);
 
-    const todayDate = new Date();
-    const todayDay = todayDate.getDate();
-    const todayMonth = todayDate.getMonth() + 1;
-    const todayYear = todayDate.getFullYear();
-    const todayDateString = todayMonth + "/" + todayDay + "/" + todayYear;
+    const allEvents = data.items
+    .filter((event) => event.status !== "cancelled")
+    .filter((event) => event.recurrence !== null)
+    .filter((event) => event.summary !== "Kickstart Meeting");
+
+    // Create event on Discord for the upcoming event
+    createDiscordEvents(allEvents, client);
+
+    console.log("Checking for events...");
+    const events = await getValidEvents(allEvents);
 
     if (events.length === 0) {
         return;
     } else if (events.length >= 1) {
+        const messageDay = new Date(today);
+        messageDay.setDate(today.getDate() + 1);
         webhook.send(
-            `Hey @everyone, it's ${todayDateString}, here are some reminders about our upcoming events!\n`
+            `Hey @everyone, it's ${dateToString(messageDay)}, here are some reminders about our upcoming events!\n`
         );
-
-        // Create event on Discord for the upcoming event
-        createDiscordEvents(events, client);
     }
 
     // Sort events by today, then tomorrow, then next week
