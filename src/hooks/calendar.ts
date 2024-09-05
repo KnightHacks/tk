@@ -176,10 +176,10 @@ async function createDiscordEvents(events: Messages[], client: Client) {
                     continue;
                 }
                 // Check if the event already exists
-                const exestingEvents = await guild.scheduledEvents.fetch();
+                const existingEvents = await guild.scheduledEvents.fetch();
 
                 // If the event already exists, skip
-                if (exestingEvents.some((e) => e.name === event.summary)) {
+                if (existingEvents.some((e) => e.name === event.summary)) {
                     console.log(
                         `Event "${event.summary}" already exists in guild "${guild.name}". Skipping creation.`
                     );
