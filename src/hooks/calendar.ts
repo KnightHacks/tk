@@ -2,7 +2,6 @@ import {
     WebhookClient,
     EmbedBuilder,
     Client,
-    GuildScheduledEventManager,
 } from "discord.js";
 import fetch from "node-fetch";
 import cron from "node-cron";
@@ -227,6 +226,7 @@ async function getValidEvents() {
     const allEvents = data.items
         .filter((event) => event.status !== "cancelled")
         .filter((event) => event.recurrence !== null)
+        .filter((event) => event.summary !== "Kickstart Meeting")
         // remove elements with the same summary, keeping the greatest date
         // this is to prevent duplicate events from being displayed
         .reduce(
