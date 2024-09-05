@@ -2,7 +2,6 @@ import {
     WebhookClient,
     EmbedBuilder,
     Client,
-    GuildScheduledEventManager,
 } from "discord.js";
 import fetch from "node-fetch";
 import cron from "node-cron";
@@ -167,7 +166,10 @@ function getDateProps(
 }
 
 // Function to create discord event
-async function createDiscordEvents(events: Messages[], client: Client) {
+async function createDiscordEvents(
+    events: Messages[] | GoogleCalendarDataProps[], 
+    client: Client
+    ) {
     // Iterate through the next week events
     events.map(async (event) => {
         // Create a guild event for each event using the discord client
@@ -177,10 +179,10 @@ async function createDiscordEvents(events: Messages[], client: Client) {
                     continue;
                 }
                 // Check if the event already exists
-                const exestingEvents = await guild.scheduledEvents.fetch();
+                const existingEvents = await guild.scheduledEvents.fetch();
 
                 // If the event already exists, skip
-                if (exestingEvents.some((e) => e.name === event.summary)) {
+                if (existingEvents.some((e) => e.name === event.summary)) {
                     console.log(
                         `Event "${event.summary}" already exists in guild "${guild.name}". Skipping creation.`
                     );
