@@ -166,10 +166,7 @@ function getDateProps(
 }
 
 // Function to create discord event
-async function createDiscordEvents(
-    events: Messages[] | GoogleCalendarDataProps[], 
-    client: Client
-    ) {
+async function createDiscordEvents(events: Messages[], client: Client) {
     // Iterate through the next week events
     events.map(async (event) => {
         // Create a guild event for each event using the discord client
