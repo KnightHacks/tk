@@ -75,7 +75,7 @@ const fetchEvents = async (url: string) => {
 function isSameDay(date1: Date, date2: Date, event?: string): boolean {
     // Normalize dates to midnight UTC
     const normalizeDate = (date: Date) =>
-        new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+        new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
 
     const d1 = normalizeDate(date1);
     const d2 = normalizeDate(date2);
