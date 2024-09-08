@@ -323,7 +323,7 @@ async function hookLogic(client: Client, webhook: WebhookClient) {
         const messageDay = new Date(today);
         messageDay.setDate(today.getDate() + 1);
         webhook.send(
-            `Hey @everyone, it's ${dateToString(messageDay)}, here are some reminders about our upcoming events!\n`
+            `Hey <@&${config.CALENDAR_ROLE_ID}>, it's ${dateToString(messageDay)}, here are some reminders about our upcoming events!\n`
         );
     }
 

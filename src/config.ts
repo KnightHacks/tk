@@ -17,6 +17,7 @@ const {
     DATABASE_URL,
     DATABASE_AUTH_TOKEN,
     ANIMAL_WEBHOOK_URL,
+    CALENDAR_ROLE_ID,
 } = process.env;
 
 // Check if the environment variables are set
@@ -32,7 +33,8 @@ if (
     !CALENDAR_WEBHOOK_URL ||
     !DATABASE_URL ||
     !DATABASE_AUTH_TOKEN ||
-    !ANIMAL_WEBHOOK_URL
+    !ANIMAL_WEBHOOK_URL ||
+    !CALENDAR_ROLE_ID
 ) {
     throw new Error("Missing environment variables");
 }
@@ -51,4 +53,5 @@ export const config = {
     DATABASE_URL,
     DATABASE_AUTH_TOKEN,
     ANIMAL_WEBHOOK_URL,
+    CALENDAR_ROLE_ID
 };
