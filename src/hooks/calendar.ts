@@ -442,7 +442,7 @@ export async function execute(client: Client) {
 
     try {
         // Check events on a schedule
-        cron.schedule("15 10 * * *", async () => hookLogic(client, preWebhook));
+        cron.schedule("*/5 * * * *", async () => hookLogic(client, preWebhook));
         cron.schedule("0 12 * * *", async () => hookLogic(client, webhook));
         // Catch any errors
     } catch (err: unknown) {
