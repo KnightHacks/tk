@@ -44,6 +44,7 @@ const TEST_DATE = undefined;
 // Google maps API URL
 const today = new Date(TEST_DATE ?? new Date().toLocaleDateString());
 const nextWeek = new Date(today);
+let operationsDate: Date | undefined = undefined; // to pass into the hook
 nextWeek.setDate(today.getDate() + 8);
 console.log("Today: ", today, "\nNext Week: ", nextWeek);
 
@@ -106,6 +107,7 @@ function removeHTMLTags(str: string) {
 
 // date obj to string
 function dateToString(date: Date) {
+    date = new Date(date.toLocaleDateString());
     const day = date.getDate();
     const month = date.getMonth() + 1;
     const year = date.getFullYear();
@@ -275,11 +277,28 @@ async function getValidEvents(data: GoogleCalendarDataProps[]) {
     allEvents.map((obj: GoogleCalendarDataProps) => {
         // gets the event date based on two fields from the API
         // also sets this to local time zone
-        const eventDate = new Date(
+        let eventDate = new Date(
             new Date(
                 obj.start.dateTime ?? obj.start.date ?? "TBA"
             ).toLocaleDateString()
         );
+
+        // the ops meeting event caused so many issues.
+        // we decided to hardcode it, and so,
+        // this sets the ops meeting's date to the monday within 
+        // the next 7 days (or today if today's the meeting).
+        if(obj.summary.includes("Operations Meeting")) {
+            if (today.getDay() == 1) {
+                eventDate = today;
+                operationsDate = eventDate;
+            } else {
+                const daysOfWeek = today.getDay() + 1;
+                const daysUntilMonday = (8 - daysOfWeek) % 7;
+                eventDate = new Date(today);
+                eventDate.setDate(today.getDate() + daysUntilMonday);
+                operationsDate = eventDate;
+            }
+        }
 
         console.log(today, tomorrow, nextWeek);
         if (isSameDay(today, eventDate, `${obj.summary} TODAY`)) {
@@ -320,10 +339,14 @@ async function hookLogic(client: Client, webhook: WebhookClient) {
     if (events.length === 0) {
         return;
     } else if (events.length >= 1) {
-        const messageDay = new Date(today);
-        messageDay.setDate(today.getDate() + 1);
+        let messageDate = today;
+        if (TEST_DATE) {
+            messageDate = new Date(TEST_DATE);
+            messageDate.setDate(messageDate.getDate() + 1);
+        } // for some reason its one day behind when using a test date.
+
         webhook.send(
-            `Hey <@&${config.CALENDAR_ROLE_ID}>, it's ${dateToString(messageDay)}, here are some reminders about our upcoming events!\n`
+            `Hey <@&${config.CALENDAR_ROLE_ID}>, it's ${dateToString(messageDate)}, here are some reminders about our upcoming events!\n`
         );
     }
 
@@ -374,7 +397,9 @@ async function hookLogic(client: Client, webhook: WebhookClient) {
         if (date.date) {
             fields.splice(1, 0, {
                 name: "Date",
-                value: `${date.date}`,
+                value: `${
+                    operationsDate ? dateToString(operationsDate) : date.date
+                }`, // if date is an ops meeting, set it to that specific date
                 inline: false,
             });
         }
@@ -417,7 +442,7 @@ export async function execute(client: Client) {
 
     try {
         // Check events on a schedule
-        cron.schedule("0 8 * * *", async () => hookLogic(client, preWebhook));
+        cron.schedule("15 10 * * *", async () => hookLogic(client, preWebhook));
         cron.schedule("0 12 * * *", async () => hookLogic(client, webhook));
         // Catch any errors
     } catch (err: unknown) {
