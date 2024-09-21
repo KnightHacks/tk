@@ -1,6 +1,6 @@
 import { Client } from "discord.js";
-import { config } from "./config";
 import { commands } from "./commands";
+import { config } from "./config";
 import { deployCommands } from "./deploy-commands";
 import { hooks } from "./hooks";
 
@@ -49,5 +49,5 @@ client.login(config.DISCORD_TOKEN);
 
 // Call all of the hooks (each hook will need a webhook client created in the hook)
 for (const hook of Object.values(hooks)) {
-    hook();
+    hook(client);
 }
