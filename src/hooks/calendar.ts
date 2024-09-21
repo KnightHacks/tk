@@ -215,7 +215,7 @@ async function createDiscordEvents(
         console.log(event.summary, event.start.dateTime);
     });
 
-    const guildId = "1263902859469262848";
+    const guildId = "486628710443778071";
     const guild = client.guilds.cache.get(guildId);
 
     if (!guild) {
