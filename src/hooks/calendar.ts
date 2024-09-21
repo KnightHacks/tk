@@ -130,7 +130,7 @@ export async function execute() {
                 return;
             } else if (events.length >= 1) {
                 webhook.send(
-                    `Hey everyone, here are some reminders about our upcoming events starting in **FIFTEEN MINUTES**! <@&${config.CALENDAR_ROLE_ID}>\n`
+                    `Get excited scallywags, here are some events occurring in **FIFTEEN MINUTES**! <@&${config.CALENDAR_ROLE_ID}>\n`
                 );
             }
 
