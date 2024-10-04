@@ -35,12 +35,12 @@ interface TimeProps {
 
 // Set as a date and time to test the same day function
 // a string in the form "YYYY-MM-DDTHH:MM:SS" can be passed to test a specific date and time
-const TEST_DATE = "2024-10-04T16:45:00-04:00";
+// const TEST_DATE = "2024-10-05T16:45:00-04:00";
+const TEST_DATE = undefined;
 
 // Google maps API URL
 const today = new Date(TEST_DATE ?? new Date().toLocaleDateString());
 const nextWeek = new Date(today);
-let operationsDate: Date | undefined = undefined; // to pass into the hook
 nextWeek.setDate(today.getDate() + 8);
 console.log("Today: ", today, "\nNext Week: ", nextWeek);
 
@@ -105,9 +105,9 @@ function isFifteenMinutesApart(
     const formatTime = (date: Date) => date.toTimeString().split(" ")[0]; // Extract HH:MM:SS from the full time string
 
     // Log the times of date1 and date2
-    console.log("15 MINUTE EVENT:", event);
-    console.log("DATE1 TIME:", formatTime(date1));
-    console.log("DATE2 TIME:", formatTime(date2));
+    // console.log("15 MINUTE EVENT:", event);
+    // console.log("DATE1 TIME:", formatTime(date1));
+    // console.log("DATE2 TIME:", formatTime(date2));
 
     // Get the time difference in milliseconds
     const diff = Math.abs(date2.getTime() - date1.getTime());
@@ -115,7 +115,7 @@ function isFifteenMinutesApart(
     // Convert the time difference to minutes
     const diffMinutes = Math.floor(diff / 60000); // 60000 ms = 1 minute
 
-    console.log("TIME DIFFERENCE IN MINUTES:", diffMinutes);
+    // console.log("TIME DIFFERENCE IN MINUTES:", diffMinutes);
 
     // Return true if the difference is exactly 15 minutes
     return diffMinutes === 15;
@@ -225,6 +225,7 @@ async function createDiscordEvents(
 
     // Fetch existing scheduled events once
     const existingEvents = await guild.scheduledEvents.fetch();
+
     // console.log("EXISTING EVENTS FETCHED:", existingEvents.size);
 
     // Use Promise.all to ensure all events are processed concurrently
@@ -308,9 +309,9 @@ async function getValidEvents(data: GoogleCalendarDataProps[]) {
     );
 
     // Print all summaries and start dates
-    allEvents.map((obj: GoogleCalendarDataProps) => {
-        console.log(obj.summary, obj.start.dateTime);
-    });
+    // allEvents.map((obj: GoogleCalendarDataProps) => {
+    //     console.log(obj.summary, obj.start.dateTime);
+    // });
 
     // maps through the filtered events
     allEvents.map((obj: GoogleCalendarDataProps) => {
@@ -346,9 +347,9 @@ async function hookLogic(client: Client, webhook: WebhookClient) {
     const events = await getValidEvents(allEvents);
 
     // Print valid events
-    events.map((event) => {
-        console.log("VALID EVENT: ", event.summary, event.start.dateTime);
-    });
+    // events.map((event) => {
+    //     console.log("VALID EVENT: ", event.summary, event.start.dateTime);
+    // });
 
     if (events.length === 0) {
         return;
@@ -431,7 +432,7 @@ export async function execute(client: Client) {
     });
 
     try {
-        cron.schedule("*/15 * * * * *", async () => hookLogic(client, webhook));
+        cron.schedule("*/1 * * * *", async () => hookLogic(client, webhook));
     } catch (err: unknown) {
         // silences eslint. type safety with our errors basically
         err instanceof Error

@@ -1,12 +1,12 @@
 import {
     CommandInteraction,
-    SlashCommandBuilder,
     EmbedBuilder,
     GuildMemberRoleManager,
     RoleResolvable,
+    SlashCommandBuilder,
 } from "discord.js";
-import db from "../db/db";
 import { asc, eq } from "drizzle-orm";
+import db from "../db/db";
 import { eventUsers, groups, hackers } from "../db/schema";
 // SIGN IN EVENT COMMAND
 // Command to sign into an event
@@ -56,11 +56,11 @@ export async function execute(interaction: CommandInteraction) {
         });
     }
 
-    // checks if a hacker has been accepted
-    if (hacker.status != "accepted")
+    // checks if a hacker has been confirmed
+    if (hacker.status != "confirmed")
         return interaction.reply({
             content:
-                "You have not been accepted! Please visit table for assistance!",
+                "You have not confirmed for Knight Hacks VII! Please visit the help desk for assistance!",
             ephemeral: true,
         });
 
@@ -107,8 +107,18 @@ export async function execute(interaction: CommandInteraction) {
     ) as RoleResolvable;
     const member = interaction.member;
     const memberRoles = member?.roles as GuildMemberRoleManager;
-    await memberRoles.add(role);
-    await memberRoles.add(role2);
+
+    try {
+        await memberRoles.add(role);
+        await memberRoles.add(role2);
+    } catch (error) {
+        console.log(error);
+        return interaction.reply({
+            content:
+                "An error occurred while adding roles! Please find the nearest organizer.",
+            ephemeral: true,
+        });
+    }
 
     const groupName =
         minGroup.name.charAt(0).toUpperCase() + minGroup.name.slice(1);
@@ -122,5 +132,6 @@ export async function execute(interaction: CommandInteraction) {
         .setColor(0xdbc34c);
     // Respond with a success status
     // TODO: ping group role!
+    console.log("Checked In: ", user?.firstName, user?.lastName);
     return interaction.reply({ embeds: [embed], ephemeral: true });
 }

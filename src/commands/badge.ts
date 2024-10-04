@@ -39,7 +39,7 @@ export async function execute(interaction: CommandInteraction) {
     const groupName =
         group!.name.charAt(0).toUpperCase() + group!.name.slice(1);
     const embed = new EmbedBuilder()
-        .setTitle(`Welcome, **${user?.firstName} ${user?.lastName}**!`)
+        .setTitle(`Hello, **${user?.firstName} ${user?.lastName}**!`)
         .setImage(group!.image)
         .setDescription(`You're a part of the ${groupName} Crew!`)
         .setColor(0xdbc34c);
