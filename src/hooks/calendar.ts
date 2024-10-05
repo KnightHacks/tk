@@ -341,7 +341,7 @@ async function hookLogic(client: Client, webhook: WebhookClient) {
         .filter((event) => event.summary !== "Kickstart Meeting");
 
     // Create event on Discord for the upcoming event
-    createDiscordEvents(allEvents, client);
+    // createDiscordEvents(allEvents, client);
 
     console.log("Checking for events...");
     const events = await getValidEvents(allEvents);

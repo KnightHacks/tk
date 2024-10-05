@@ -18,8 +18,6 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: CommandInteraction) {
     const username = interaction.user.username;
-    console.log(username);
-    console.log(username == "dvidal1205");
 
     // Grabs data from db with sign-up form data to check for discord username
     const userProfileData = await db.query.userProfiles.findFirst({
@@ -27,9 +25,9 @@ export async function execute(interaction: CommandInteraction) {
     });
 
     if (userProfileData == null) {
-        console.log("User Profile Missing");
+        console.log(`User Profile Missing ${username}`);
         return interaction.reply({
-            content: "User not found! Please visit table for assistance!",
+            content: `User with discord ${username} not found! Please visit table for assistance!`,
             ephemeral: true,
         });
     }
@@ -40,9 +38,9 @@ export async function execute(interaction: CommandInteraction) {
     });
 
     if (!hacker) {
-        console.log("Hacker Profile Missing");
+        console.log(`Hacker Profile Missing ${username}`);
         return interaction.reply({
-            content: "User not found! Please visit table for assistance!",
+            content: `User not found with discord ${username} Please visit table for assistance!`,
             ephemeral: true,
         });
     }
