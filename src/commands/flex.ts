@@ -15,8 +15,9 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: CommandInteraction) {
     // Create the event in the database
-    const topUsers = await db.query.users.findMany({
+    const topUsers = await db.query.eventUsers.findMany({
         orderBy: (users, { desc }) => [desc(users.points)],
+	limit: 10
     });
 
     const curUserPlace = topUsers.findIndex(

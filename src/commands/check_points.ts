@@ -11,9 +11,9 @@ export const data = new SlashCommandBuilder()
 
 // Logic for the check points command
 export async function execute(interaction: CommandInteraction) {
-    const user = await db.query.users.findFirst({
+    const user = await db.query.eventUsers.findFirst({
         where: (table, { eq }) => eq(table.discord_id, interaction.user.id),
-    });
+    });	
 
     if (!user) {
         return interaction.reply({
